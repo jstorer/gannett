@@ -25,7 +25,7 @@ func getProduceItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
 	for _, item := range produceDB {
-		if item.ProduceCode == strings.ToUpper(params["producecode"]) {
+		if item.ProduceCode == params["producecode"] {
 			json.NewEncoder(w).Encode(item)
 			return
 		}
@@ -42,16 +42,17 @@ func createProduceItem(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	produceItem.ProduceCode = strings.ToUpper(produceItem.ProduceCode)
 	produceDB = append(produceDB, produceItem)
 	json.NewEncoder(w).Encode(produceItem)
 }
 
-func deleteProduceItem(w http.ResponseWriter, r *http.Request){
-	w.Header().Set("Content-Type","application/json")
+func deleteProduceItem(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
-	for index,item := range produceDB{
-		if item.ProduceCode == params["producecode"]{
-			produceDB = append(produceDB[:index],produceDB[index+1:]...)
+	for index, item := range produceDB {
+		if item.ProduceCode == params["producecode"] {
+			produceDB = append(produceDB[:index], produceDB[index+1:]...)
 			break
 		}
 		json.NewEncoder(w).Encode(produceDB)
@@ -68,7 +69,7 @@ func main() {
 	router.HandleFunc("/produce", getAllProduce).Methods("GET")
 	router.HandleFunc("/produce/{producecode}", getProduceItem).Methods("GET")
 	router.HandleFunc("/produce", createProduceItem).Methods("POST")
-	router.HandleFunc("/produce/{producecode}",deleteProduceItem).Methods("DELETE")
+	router.HandleFunc("/produce/{producecode}", deleteProduceItem).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 
