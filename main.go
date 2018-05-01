@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -16,51 +17,92 @@ type ProduceItem struct {
 
 var produceDB []ProduceItem
 
-func getAllProduce(w http.ResponseWriter, r *http.Request) {
+func isValidProduceCode(produceCode string) bool {
+	match, _ := regexp.MatchString(`[\d\w]{4}\-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}`, produceCode)
+	return match
+}
+
+func jsonResponse(w http.ResponseWriter, statusCode int, payload interface{}) {
+	response, _ := json.Marshal(payload)
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(produceDB)
+	w.WriteHeader(statusCode)
+	w.Write(response)
+}
+
+func getAllProduce(w http.ResponseWriter, r *http.Request) {
+	jsonResponse(w, http.StatusOK, produceDB)
 }
 
 func getProduceItem(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
+
+	//check if produce code format is valid
+	params["producecode"] = strings.ToUpper(params["producecode"])
+	if !isValidProduceCode(params["producecode"]) {
+		http.Error(w, "Error 400 - Invalid Produce Code Format.", 400)
+		return
+	}
+
+	//check if produce code exists
 	for _, item := range produceDB {
 		if item.ProduceCode == params["producecode"] {
-			json.NewEncoder(w).Encode(item)
+			jsonResponse(w, http.StatusOK, item)
 			return
 		}
 	}
+
+	//produce code does not exist
+	http.Error(w, "Error 404 - Produce Code Does Not Exist.", 404)
+
 }
 
 func createProduceItem(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	var produceItem ProduceItem
+
 	_ = json.NewDecoder(r.Body).Decode(&produceItem)
+
+	produceItem.ProduceCode = strings.ToUpper(produceItem.ProduceCode)
+
+	//check if produce code already in DB
 	for _, item := range produceDB {
 		if item.ProduceCode == produceItem.ProduceCode {
-			println("item already exists.")
+			http.Error(w, "Error 409 - Produce Code Already Exists", 409)
 			return
 		}
 	}
+
 	produceItem.ProduceCode = strings.ToUpper(produceItem.ProduceCode)
 	produceDB = append(produceDB, produceItem)
-	json.NewEncoder(w).Encode(produceItem)
+	jsonResponse(w, http.StatusOK, produceItem)
+
 }
 
 func deleteProduceItem(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
+
+	//check if produce code format is valid
+	params["producecode"] = strings.ToUpper(params["producecode"])
+	if !isValidProduceCode(params["producecode"]) {
+		http.Error(w, "Error 400 - Invalid Produce Code Format.", 400)
+		return
+	}
+
+	//check if item to delete exists
 	for index, item := range produceDB {
 		if item.ProduceCode == params["producecode"] {
 			produceDB = append(produceDB[:index], produceDB[index+1:]...)
-			break
+			jsonResponse(w, http.StatusOK, produceDB)
+			return
 		}
-		json.NewEncoder(w).Encode(produceDB)
 	}
+
+	http.Error(w, "Error 404 - Produce Code Not Found.", 404)
 }
 
 func main() {
 	router := mux.NewRouter()
+
 	produceDB = append(produceDB, ProduceItem{ProduceCode: "A12T-4GH7-QPL9-3N4M", Name: "Lettuce", UnitPrice: "$3.46"})
 	produceDB = append(produceDB, ProduceItem{ProduceCode: "E5T6-9UI3-TH15-QR88", Name: "Peach", UnitPrice: "$2.99"})
 	produceDB = append(produceDB, ProduceItem{ProduceCode: "YRT6-72AS-K736-L4AR", Name: "Green Pepper", UnitPrice: "$0.79"})
