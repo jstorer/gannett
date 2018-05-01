@@ -18,7 +18,7 @@ type ProduceItem struct {
 var produceDB []ProduceItem
 
 func isValidProduceCode(produceCode string) bool {
-	match, _ := regexp.MatchString(`[\d\w]{4}\-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}`, produceCode)
+	match, _ := regexp.MatchString(`^[\d\w]{4}-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}$`, produceCode)
 	return match
 }
 
@@ -44,7 +44,7 @@ func getProduceItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//check if produce code exists
+	//check if produce code exists, if exists output json and return
 	for _, item := range produceDB {
 		if item.ProduceCode == params["producecode"] {
 			jsonResponse(w, http.StatusOK, item)
@@ -54,7 +54,7 @@ func getProduceItem(w http.ResponseWriter, r *http.Request) {
 
 	//produce code does not exist
 	http.Error(w, "Error 404 - Produce Code Does Not Exist.", 404)
-
+	return
 }
 
 func createProduceItem(w http.ResponseWriter, r *http.Request) {
