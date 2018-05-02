@@ -131,7 +131,7 @@ func TestGetAllProduce(t *testing.T) {
 func TestGetProduceItem(t *testing.T) {
 	//VALID TEST----------------------------------------------------------
 	//Get item
-	api.ProduceDB = append(api.ProduceDB, api.ProduceItem{ProduceCode: "ABCD-1234-EFGH-5678", Name: "Black Beans", UnitPrice: "$2.25"})
+	api.ProduceDB.Data = append(api.ProduceDB.Data, api.ProduceItem{ProduceCode: "ABCD-1234-EFGH-5678", Name: "Black Beans", UnitPrice: "$2.25"})
 	request, err := http.NewRequest("GET", fmt.Sprintf("%s/ABCD-1234-EFGH-5678", produceUrl), nil)
 	response, err := http.DefaultClient.Do(request)
 
@@ -363,7 +363,7 @@ func TestCreateProduceItem(t *testing.T) {
 func TestDeleteProduceItem(t *testing.T){
 	//VALID TEST----------------------------------------------------------
 	//Delete item
-	api.ProduceDB = append(api.ProduceDB, api.ProduceItem{ProduceCode: "ABCD-1234-EFGH-5678", Name: "Black Beans", UnitPrice: "$2.25"})
+	api.ProduceDB.Data = append(api.ProduceDB.Data, api.ProduceItem{ProduceCode: "ABCD-1234-EFGH-5678", Name: "Black Beans", UnitPrice: "$2.25"})
 	request, err := http.NewRequest("DELETE", fmt.Sprintf("%s/ABCD-1234-EFGH-5678", produceUrl), nil)
 	response, err := http.DefaultClient.Do(request)
 

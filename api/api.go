@@ -15,15 +15,19 @@ type ProduceItem struct {
 	UnitPrice   string `json:"unitprice"`
 }
 
-var ProduceDB []ProduceItem
-var mutex = &sync.Mutex{}
+var ProduceDB DBObject
+
+type DBObject struct{
+	mu sync.Mutex
+	Data []ProduceItem
+}
 
 func Initialize() {
-	ProduceDB = nil
-	ProduceDB = append(ProduceDB, ProduceItem{ProduceCode: "A12T-4GH7-QPL9-3N4M", Name: "Lettuce", UnitPrice: "$3.46"})
-	ProduceDB = append(ProduceDB, ProduceItem{ProduceCode: "E5T6-9UI3-TH15-QR88", Name: "Peach", UnitPrice: "$2.99"})
-	ProduceDB = append(ProduceDB, ProduceItem{ProduceCode: "YRT6-72AS-K736-L4AR", Name: "Green Pepper", UnitPrice: "$0.79"})
-	ProduceDB = append(ProduceDB, ProduceItem{ProduceCode: "TQ4C-VV6T-75ZX-1RMR", Name: "Gala Apple", UnitPrice: "$3.59"})
+	ProduceDB.Data = nil
+	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "A12T-4GH7-QPL9-3N4M", Name: "Lettuce", UnitPrice: "$3.46"})
+	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "E5T6-9UI3-TH15-QR88", Name: "Peach", UnitPrice: "$2.99"})
+	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "YRT6-72AS-K736-L4AR", Name: "Green Pepper", UnitPrice: "$0.79"})
+	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "TQ4C-VV6T-75ZX-1RMR", Name: "Gala Apple", UnitPrice: "$3.59"})
 }
 
 func IsValidProduceCode(produceCode string) bool {
@@ -42,15 +46,18 @@ func IsValidName(name string) bool {
 }
 
 func jsonResponse(w http.ResponseWriter, statusCode int, payload interface{}) {
-	response, _ := json.Marshal(payload)
 
+	response, _ := json.Marshal(payload)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	w.Write(response)
 }
 
 func getAllProduce(w http.ResponseWriter, r *http.Request) {
-	jsonResponse(w, http.StatusOK, ProduceDB)
+	ProduceDB.mu.Lock()
+	data := ProduceDB.Data
+	ProduceDB.mu.Unlock()
+	jsonResponse(w, http.StatusOK, data)
 }
 
 func getProduceItem(w http.ResponseWriter, r *http.Request) {
@@ -64,7 +71,10 @@ func getProduceItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//check if produce code exists, if exists output json and return
-	for _, item := range ProduceDB {
+	ProduceDB.mu.Lock()
+	data := ProduceDB.Data
+	ProduceDB.mu.Unlock()
+	for _, item := range data {
 		if item.ProduceCode == params["producecode"] {
 			jsonResponse(w, http.StatusOK, item)
 			return
@@ -125,7 +135,10 @@ func createProduceItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//check if produce code already in DB
-	for _, item := range ProduceDB {
+	ProduceDB.mu.Lock()
+	data := ProduceDB.Data
+	ProduceDB.mu.Unlock()
+	for _, item := range data {
 		if item.ProduceCode == produceItem.ProduceCode {
 			http.Error(w, "Error 409 - Produce Code Already Exists", 409)
 			return
@@ -133,7 +146,9 @@ func createProduceItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	produceItem.ProduceCode = strings.ToUpper(produceItem.ProduceCode)
-	ProduceDB = append(ProduceDB, produceItem)
+	ProduceDB.mu.Lock()
+	ProduceDB.Data = append(ProduceDB.Data, produceItem)
+	ProduceDB.mu.Unlock()
 	jsonResponse(w, http.StatusCreated, produceItem)
 
 }
@@ -149,10 +164,16 @@ func deleteProduceItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//check if item to delete exists
-	for index, item := range ProduceDB {
+	ProduceDB.mu.Lock()
+	data := ProduceDB.Data
+	ProduceDB.mu.Unlock()
+	for index, item := range data {
 		if item.ProduceCode == params["producecode"] {
-			ProduceDB = append(ProduceDB[:index], ProduceDB[index+1:]...)
-			jsonResponse(w, http.StatusOK, ProduceDB)
+			ProduceDB.mu.Lock()
+			ProduceDB.Data = append(ProduceDB.Data[:index], ProduceDB.Data[index+1:]...)
+			data = ProduceDB.Data
+			ProduceDB.mu.Unlock()
+			jsonResponse(w, http.StatusOK, data)
 			return
 		}
 	}
