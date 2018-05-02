@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"sync"
 )
 
 type ProduceItem struct {
@@ -15,6 +16,7 @@ type ProduceItem struct {
 }
 
 var ProduceDB []ProduceItem
+var mutex = &sync.Mutex{}
 
 func Initialize() {
 	ProduceDB = nil
