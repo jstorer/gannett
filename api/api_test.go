@@ -175,7 +175,7 @@ func TestGetProduceItem(t *testing.T) {
 func TestCreateProduceItem(t *testing.T) {
 	//VALID TEST----------------------------------------------------------
 	//Check if valid produce item created
-	produceItemJson := `{"producecode":"abcd-1234-EFGH-5I6J","name":"Cheese","unitprice":"$9.99"}`
+	produceItemJson := `{"produce_code":"abcd-1234-EFGH-5I6J","name":"Cheese","unit_price":"$9.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err := http.NewRequest("POST", produceUrl, reader)
 	response, err := http.DefaultClient.Do(request)
@@ -188,7 +188,7 @@ func TestCreateProduceItem(t *testing.T) {
 		t.Errorf("201 Created expected but %d returned", response.StatusCode)
 	}
 
-	produceItemJson = `{"producecode":"abCd-12D4-2FGH-5i6J","name":"Lemon Grass","unitprice":"$2.1"}`
+	produceItemJson = `{"produce_code":"abCd-12D4-2FGH-5i6J","name":"Lemon Grass","unit_price":"$2.1"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -203,7 +203,7 @@ func TestCreateProduceItem(t *testing.T) {
 
 	//INVALID TESTS------------------------------------------------------
 	//left produce code blank
-	produceItemJson = `{"producecode":"","name":"Cheese","unitprice":"$9.99"}`
+	produceItemJson = `{"produce_code":"","name":"Cheese","unit_price":"$9.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -217,7 +217,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//left name blank
-	produceItemJson = `{"producecode":"abcd-1234-EFGH-5I6J","name":"","unitprice":"$9.99"}`
+	produceItemJson = `{"produce_code":"abcd-1234-EFGH-5I6J","name":"","unit_price":"$9.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -231,7 +231,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//left unit price blank
-	produceItemJson = `{"producecode":"abcd-1234-EFGH-5I6J","name":"Cheese","unitprice":""}`
+	produceItemJson = `{"produce_code":"abcd-1234-EFGH-5I6J","name":"Cheese","unit_price":""}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -245,7 +245,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//All bad formats
-	produceItemJson = `{"producecode":"abcd-1234-EFGH-5I6Ja","name":"$Cheese","unitprice":"$09.99"}`
+	produceItemJson = `{"produce_code":"abcd-1234-EFGH-5I6Ja","name":"$Cheese","unit_price":"$09.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -259,7 +259,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//Bad produce code and price
-	produceItemJson = `{"producecode":"abcd-1234-EFGH-5I6Ja","name":"Cheese","unitprice":"9.99"}`
+	produceItemJson = `{"produce_code":"abcd-1234-EFGH-5I6Ja","name":"Cheese","unit_price":"9.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -273,7 +273,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//Bad produce code and name
-	produceItemJson = `{"producecode":"abcd-1234-EFGH-5I6Ja","name":" Cheese","unitprice":"$9.99"}`
+	produceItemJson = `{"produce_code":"abcd-1234-EFGH-5I6Ja","name":" Cheese","unit_price":"$9.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -287,7 +287,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//Bad price and name format
-	produceItemJson = `{"producecode":"abcd-1234-EFGH-5I6J","name":"@Cheese","unitprice":"$09.99"}`
+	produceItemJson = `{"produce_code":"abcd-1234-EFGH-5I6J","name":"@Cheese","unit_price":"$09.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -301,7 +301,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//Bad produce code format
-	produceItemJson = `{"producecode":"abcd-1234-EFGH-5I6Ja","name":"Cheese","unitprice":"$9.99"}`
+	produceItemJson = `{"produce_code":"abcd-1234-EFGH-5I6Ja","name":"Cheese","unit_price":"$9.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -315,7 +315,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//Bad unit price format
-	produceItemJson = `{"producecode":"abcd-1234-EFGH-5I6J","name":"Cheese","unitprice":"9.99"}`
+	produceItemJson = `{"produce_code":"abcd-1234-EFGH-5I6J","name":"Cheese","unit_price":"9.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -329,7 +329,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//Bad name format
-	produceItemJson = `{"producecode":"abcd-1234-EFGH-5I6J","name":" Cheese","unitprice":"$9.99"}`
+	produceItemJson = `{"produce_code":"abcd-1234-EFGH-5I6J","name":" Cheese","unit_price":"$9.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
@@ -343,7 +343,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	//Produce code (case insensitive) already exists in DB
-	produceItemJson = `{"producecode":"ABCD-1234-EFGH-5I6J","name":"Cheese","unitprice":"$9.99"}`
+	produceItemJson = `{"produce_code":"ABCD-1234-EFGH-5I6J","name":"Cheese","unit_price":"$9.99"}`
 	reader = strings.NewReader(produceItemJson)
 	request, err = http.NewRequest("POST", produceUrl, reader)
 	response, err = http.DefaultClient.Do(request)
