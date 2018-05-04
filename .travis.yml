@@ -11,7 +11,7 @@ before_install:
   - docker run --rm -v "$PWD":/go/src/github.com/jstorer/gannett -w /go/src/github.com/jstorer/gannett iron/go:dev go build -o supermarket
   - docker build -t jstorer/gannett .
   - docker ps -a
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASS
   - docker push jstorer/gannett
 
 notifications:
