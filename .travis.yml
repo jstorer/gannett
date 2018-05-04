@@ -5,8 +5,3 @@ go:
 services:
   - docker
 
-jobs:
-  include:
-    - stage: build docker image
-    script:
-      - docker images
