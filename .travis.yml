@@ -1,7 +1,16 @@
+sudo: required
+services:
+  - docker
 language: go
 go:
   - master
 
-services:
-  - docker
-
+before_install:
+  - go get github.com/mattn/goveralls
+  - docker run --rm -v "$PWD":/go/src/github.com/jstorer/gannett -w /go/src/github.com/jstorer/gannett iron/go:dev go build -o supermarket
+  - docker build -t jstorer/gannett .
+script:
+  - $HOME/gopath/bin/goveralls -v -service=travis-ci
+notifications:
+  email:
+    - jeremyjstorer@gmail.com
