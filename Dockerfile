@@ -4,6 +4,6 @@ FROM iron/go
 WORKDIR /app
 
 # Now just add the binary
-ADD myapp /app/
+ADD supermarket /app/
 
-ENTRYPOINT ["./myapp"]
+ENTRYPOINT ["./supermarket"]

@@ -4,9 +4,11 @@
     <list default="true" id="0d216430-9403-4813-a7b4-4ee3cacecde2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/api.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/api.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/api_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gannett" beforeDir="false" afterPath="$PROJECT_DIR$/gannett" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/api_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gannett" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,16 +18,43 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/gannett$go_test_gannett.out" NAME="go test gannett Coverage Results" MODIFIED="1525381730003" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/gannett$go_test_gannett.out" NAME="go test gannett Coverage Results" MODIFIED="1525465936804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/gannett$TestGetAllProduce_in_github_com_jstorer_gannett_api.out" NAME="TestGetAllProduce in github.com/jstorer/gannett/api Coverage Results" MODIFIED="1525224032958" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="api.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/api/api.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="383">
+              <caret line="71" column="23" selection-start-line="71" selection-start-column="23" selection-end-line="71" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name=".travis.yml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.travis.yml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="242">
-              <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
+              <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Dockerfile" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Dockerfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="8" column="26" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="api_test.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/api/api_test.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -45,6 +74,7 @@
       <find>producecode</find>
       <find>unitprice</find>
       <find>produceItem</find>
+      <find>api.</find>
     </findStrings>
     <replaceStrings>
       <replace>Data</replace>
@@ -64,11 +94,11 @@
         <option value="$PROJECT_DIR$/model.go" />
         <option value="$PROJECT_DIR$/main_test.go" />
         <option value="$PROJECT_DIR$/main.go" />
-        <option value="$PROJECT_DIR$/Dockerfile" />
         <option value="$PROJECT_DIR$/config/tpl.go" />
-        <option value="$PROJECT_DIR$/api/api_test.go" />
         <option value="$PROJECT_DIR$/templates/produce.gohtml" />
+        <option value="$PROJECT_DIR$/api/api_test.go" />
         <option value="$PROJECT_DIR$/api/api.go" />
+        <option value="$PROJECT_DIR$/Dockerfile" />
         <option value="$PROJECT_DIR$/.travis.yml" />
       </list>
     </option>
@@ -130,9 +160,9 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/api" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/api/templates" />
-      <recent name="$PROJECT_DIR$/api" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -215,34 +245,34 @@
     </recent_temporary>
   </component>
   <component name="TestHistory">
-    <history-entry file="go_test_gannett - 2018.05.03 at 19h 38m 40s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.03 at 19h 38m 55s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.03 at 19h 39m 20s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.03 at 19h 48m 07s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.03 at 19h 49m 35s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.03 at 19h 50m 11s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.03 at 19h 51m 29s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.03 at 19h 52m 16s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.03 at 19h 59m 42s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
     <history-entry file="go_test_gannett - 2018.05.03 at 20h 06m 40s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.04 at 16h 29m 20s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.04 at 16h 29m 24s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.04 at 16h 29m 42s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.04 at 16h 29m 57s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.04 at 16h 30m 20s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.04 at 16h 30m 58s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.04 at 16h 31m 10s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.04 at 16h 31m 14s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.04 at 16h 32m 17s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
   </component>
@@ -250,16 +280,18 @@
     <frame x="1274" y="23" width="1278" height="1417" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22222222" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.30007446" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Coverage" order="3" side_tool="true" weight="0.3295499" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.3298585" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22222222" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.3298585" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39985108" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -268,9 +300,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Messages" order="7" weight="0.13826607" />
-      <window_info anchor="right" id="Coverage" order="3" side_tool="true" weight="0.3295499" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -288,7 +318,9 @@
     <MESSAGE value="added mutex to read/write/delete points" />
     <MESSAGE value="added travis and dep" />
     <MESSAGE value="added go routines for read/write/delete" />
-    <option name="LAST_COMMIT_MESSAGE" value="added go routines for read/write/delete" />
+    <MESSAGE value="travis test 1" />
+    <MESSAGE value="travis test 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="travis test 2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -306,7 +338,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api_test.go">
+    <entry file="file://$PROJECT_DIR$/api/api_test.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7898">
           <caret line="368" selection-start-line="368" selection-end-line="368" />
@@ -351,7 +383,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api_test.go">
+    <entry file="file://$PROJECT_DIR$/api/api_test.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7502">
           <caret line="351" column="20" selection-start-line="351" selection-start-column="20" selection-end-line="351" selection-end-column="20" />
@@ -403,21 +435,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main_test.go" />
-    <entry file="file://$PROJECT_DIR$/Dockerfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/tpl.go" />
-    <entry file="file://$PROJECT_DIR$/api/api.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1142">
-          <caret line="247" column="1" selection-start-line="247" selection-start-column="1" selection-end-line="247" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
@@ -428,13 +446,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="526">
-          <caret line="368" selection-start-line="368" selection-end-line="368" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/go/src/html/template/template.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
@@ -442,10 +453,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/api/api_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/api.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="383">
+          <caret line="71" column="23" selection-start-line="71" selection-start-column="23" selection-end-line="71" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="8" column="26" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
-          <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
+          <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
         </state>
       </provider>
     </entry>

@@ -97,12 +97,7 @@ func removeProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
 	pItemChnl <- ProduceItem{}
 }
 
-func getAllProduce(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "error 405 - method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
+func getAllProduce(w http.ResponseWriter, _ *http.Request) {
 	chnl := make(chan []ProduceItem)
 	go readAllProduceItems(chnl)
 	allItems := <-chnl
@@ -110,11 +105,6 @@ func getAllProduce(w http.ResponseWriter, r *http.Request) {
 }
 
 func getProduceItem(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "error 405 - method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	params := mux.Vars(r)
 
 	//check if produce code format is valid
@@ -140,11 +130,6 @@ func getProduceItem(w http.ResponseWriter, r *http.Request) {
 }
 
 func createProduceItem(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, "error 405 - method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	var pItem ProduceItem
 
 	_ = json.NewDecoder(r.Body).Decode(&pItem)
@@ -208,11 +193,6 @@ func createProduceItem(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteProduceItem(w http.ResponseWriter, r *http.Request) {
-	//GET added for sake of demo front end simplicity
-	if  r.Method != "DELETE" {
-		http.Error(w, "error 405 - method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
 
 	params := mux.Vars(r)
 
