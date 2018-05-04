@@ -1,4 +1,4 @@
-package api_test
+package main
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"strings"
 	"testing"
 )
@@ -33,11 +32,6 @@ func init() {
 	produceUrl = fmt.Sprintf("%s/produce", server.URL)
 }
 
-func TestMain(m *testing.M) {
-	api.Initialize()
-	code := m.Run()
-	os.Exit(code)
-}
 
 func TestIsValidProduceCode(t *testing.T) {
 	var testCodes []ProduceTestCode
@@ -116,6 +110,7 @@ func TestIsValidUnitPrice(t *testing.T) {
 }
 
 func TestGetAllProduce(t *testing.T) {
+	api.Initialize()
 	request, err := http.NewRequest("GET", produceUrl, nil)
 	response, err := http.DefaultClient.Do(request)
 
@@ -129,6 +124,7 @@ func TestGetAllProduce(t *testing.T) {
 }
 
 func TestGetProduceItem(t *testing.T) {
+	api.Initialize()
 	//VALID TEST----------------------------------------------------------
 	//Get item
 	api.ProduceDB.Data = append(api.ProduceDB.Data, api.ProduceItem{ProduceCode: "ABCD-1234-EFGH-5678", Name: "Black Beans", UnitPrice: "$2.25"})
@@ -168,11 +164,10 @@ func TestGetProduceItem(t *testing.T) {
 		t.Errorf("404 Not found expected but %d returned", response.StatusCode)
 	}
 
-	//init DB after manipulating
-	api.Initialize()
 }
 
 func TestCreateProduceItem(t *testing.T) {
+	api.Initialize()
 	//VALID TEST----------------------------------------------------------
 	//Check if valid produce item created
 	produceItemJson := `{"produce_code":"abcd-1234-EFGH-5I6J","name":"Cheese","unit_price":"$9.99"}`
@@ -356,11 +351,10 @@ func TestCreateProduceItem(t *testing.T) {
 		t.Errorf("409 Item already exists expected but %d returned", response.StatusCode)
 	}
 
-	//init DB after manipulating
-	api.Initialize()
 }
 
-func TestDeleteProduceItem(t *testing.T){
+func TestDeleteProduceItem(t *testing.T) {
+	api.Initialize()
 	//VALID TEST----------------------------------------------------------
 	//Delete item
 	api.ProduceDB.Data = append(api.ProduceDB.Data, api.ProduceItem{ProduceCode: "ABCD-1234-EFGH-5678", Name: "Black Beans", UnitPrice: "$2.25"})
@@ -399,8 +393,5 @@ func TestDeleteProduceItem(t *testing.T){
 	if response.StatusCode != 404 {
 		t.Errorf("404 Not found expected but %d returned", response.StatusCode)
 	}
-
-	//init DB after manipulating
-	api.Initialize()
 
 }

@@ -22,7 +22,9 @@ type DBObject struct {
 	Data []ProduceItem
 }
 
+
 func Initialize() {
+	//init DB to indicated default values
 	ProduceDB.Data = nil
 	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "A12T-4GH7-QPL9-3N4M", Name: "Lettuce", UnitPrice: "$3.46"})
 	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "E5T6-9UI3-TH15-QR88", Name: "Peach", UnitPrice: "$2.99"})
@@ -60,6 +62,7 @@ func readProduceItem(pCode string, sendchannel chan<- ProduceItem) {
 	for _, item := range ProduceDB.Data {
 		if item.ProduceCode == pCode {
 			sendchannel <- item
+			return
 		}
 	}
 	sendchannel <- ProduceItem{}
@@ -94,19 +97,30 @@ func removeProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
 	pItemChnl <- ProduceItem{}
 }
 
-func getAllProduce(w http.ResponseWriter, _ *http.Request) {
+func getAllProduce(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "error 405 - method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	chnl := make(chan []ProduceItem)
 	go readAllProduceItems(chnl)
-	jsonResponse(w, http.StatusOK, <-chnl)
+	allItems := <-chnl
+	jsonResponse(w, http.StatusOK, allItems)
 }
 
 func getProduceItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "error 405 - method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	params := mux.Vars(r)
 
 	//check if produce code format is valid
 	params["produce_code"] = strings.ToUpper(params["produce_code"])
 	if !IsValidProduceCode(params["produce_code"]) {
-		http.Error(w, "Error 400 - Invalid Produce Code Format.", 400)
+		http.Error(w, "error 400 - invalid produce code format", 400)
 		return
 	}
 
@@ -116,25 +130,28 @@ func getProduceItem(w http.ResponseWriter, r *http.Request) {
 
 	pItem := <-chnl
 
-	//if produce item found
 	if pItem.ProduceCode != "" {
 		jsonResponse(w, http.StatusOK, pItem)
 		return
 	}
 
-	//produce code does not exist
-	http.Error(w, "Error 404 - Produce Code Does Not Exist.", 404)
+	http.Error(w, "error 404 - produce code does not exist", 404)
 	return
 }
 
 func createProduceItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "error 405 - method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	var pItem ProduceItem
 
 	_ = json.NewDecoder(r.Body).Decode(&pItem)
 
-	//are required fields empty
+	//all required fields exist
 	if pItem.ProduceCode == "" || pItem.Name == "" || pItem.UnitPrice == "" {
-		http.Error(w, "Error 400 - A Produce Item Must Contain a Code, Name, And Unit Price.", 400)
+		http.Error(w, "error 400 - a produce item must contain a code, name, and unit price", 400)
 		return
 	}
 
@@ -143,33 +160,35 @@ func createProduceItem(w http.ResponseWriter, r *http.Request) {
 	validCode := IsValidProduceCode(pItem.ProduceCode)
 	validPrice := IsValidUnitPrice(pItem.UnitPrice)
 	validName := IsValidName(pItem.Name)
+
+	//if field(s) invalid display which
 	if !validCode || !validPrice || !validName {
 		if !validCode && !validPrice && !validName {
-			http.Error(w, "Error 400 - Invalid Produce Code, Name, And Unit Price Format.", 400)
+			http.Error(w, "error 400 - invalid produce code, name, and unit price format", 400)
 			return
 		}
 		if !validCode && !validPrice {
-			http.Error(w, "Error 400 - Invalid Produce Code And Unit Price Format.", 400)
+			http.Error(w, "error 400 - invalid produce code and unit price format", 400)
 			return
 		}
 		if !validCode && !validName {
-			http.Error(w, "Error 400 - Invalid Produce Code And Name Format.", 400)
+			http.Error(w, "error 400 - invalid produce code and name format", 400)
 			return
 		}
 		if !validPrice && !validName {
-			http.Error(w, "Error 400 - Name And Unit Price Format.", 400)
+			http.Error(w, "error 400 - name and unit price format", 400)
 			return
 		}
 		if !validCode {
-			http.Error(w, "Error 400 - Invalid Produce Code Format.", 400)
+			http.Error(w, "error 400 - invalid produce code format", 400)
 			return
 		}
 		if !validPrice {
-			http.Error(w, "Error 400 - Invalid Unit Price Format.", 400)
+			http.Error(w, "error 400 - invalid unit price format", 400)
 			return
 		}
 		if !validName {
-			http.Error(w, "Error 400 - Invalid Name Format.", 400)
+			http.Error(w, "error 400 - invalid name format", 400)
 			return
 		}
 
@@ -180,7 +199,7 @@ func createProduceItem(w http.ResponseWriter, r *http.Request) {
 	pItem = <-pItemChnl
 
 	if pItem.ProduceCode == "" {
-		http.Error(w, "Error 409 - Produce Code Already Exists", 409)
+		http.Error(w, "error 409 - produce code already exists", 409)
 		return
 	}
 
@@ -189,12 +208,18 @@ func createProduceItem(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteProduceItem(w http.ResponseWriter, r *http.Request) {
+	//GET added for sake of demo front end simplicity
+	if  r.Method != "DELETE" {
+		http.Error(w, "error 405 - method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	params := mux.Vars(r)
 
 	//check if produce code format is valid
 	params["produce_code"] = strings.ToUpper(params["produce_code"])
 	if !IsValidProduceCode(params["produce_code"]) {
-		http.Error(w, "Error 400 - Invalid Produce Code Format.", 400)
+		http.Error(w, "error 400 - invalid produce code format", 400)
 		return
 	}
 
@@ -205,7 +230,7 @@ func deleteProduceItem(w http.ResponseWriter, r *http.Request) {
 	pItem = <-pItemChnl
 
 	if pItem.ProduceCode == "" {
-		http.Error(w, "Error 404 - Produce Code Not Found.", 404)
+		http.Error(w, "error 404 - produce code not found.", 404)
 		return
 	}
 
