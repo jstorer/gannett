@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"net/url"
 )
 
 type ProduceItem struct {
@@ -18,7 +19,7 @@ type ProduceItem struct {
 var ProduceDB DBObject
 
 type DBObject struct {
-	mu   sync.Mutex
+	mu   sync.RWMutex
 	Data []ProduceItem
 }
 
@@ -43,7 +44,7 @@ func IsValidUnitPrice(unitPrice string) bool {
 }
 
 func IsValidName(name string) bool {
-	match, _ := regexp.MatchString(`^[A-Za-z0-9]+.*[A-Za-z0-9]+$`, name)
+	match, _ := regexp.MatchString(`^\w+(?: \w+)*$`, name)
 	return match
 }
 
@@ -55,10 +56,14 @@ func jsonResponse(w http.ResponseWriter, statusCode int, payload interface{}) {
 }
 
 func readAllProduceItems(sendchannel chan<- []ProduceItem) {
+	ProduceDB.mu.RLock()
+	defer ProduceDB.mu.RUnlock()
 	sendchannel <- ProduceDB.Data
 }
 
 func readProduceItem(pCode string, sendchannel chan<- ProduceItem) {
+	ProduceDB.mu.RLock()
+	defer ProduceDB.mu.RUnlock()
 	for _, item := range ProduceDB.Data {
 		if item.ProduceCode == pCode {
 			sendchannel <- item
@@ -70,30 +75,29 @@ func readProduceItem(pCode string, sendchannel chan<- ProduceItem) {
 
 func writeProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
 	ProduceDB.mu.Lock()
+	defer ProduceDB.mu.Unlock()
 	for _, item := range ProduceDB.Data {
 		if item.ProduceCode == pItem.ProduceCode {
-			ProduceDB.mu.Unlock()
 			pItemChnl <- ProduceItem{}
 			return
 		}
 	}
 	pItem.ProduceCode = strings.ToUpper(pItem.ProduceCode)
 	ProduceDB.Data = append(ProduceDB.Data, pItem)
-	ProduceDB.mu.Unlock()
 	pItemChnl <- pItem
 }
 
 func removeProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
 	ProduceDB.mu.Lock()
+	defer ProduceDB.mu.Unlock()
+
 	for index, item := range ProduceDB.Data {
 		if item.ProduceCode == pItem.ProduceCode {
 			ProduceDB.Data = append(ProduceDB.Data[:index], ProduceDB.Data[index+1:]...)
-			ProduceDB.mu.Unlock()
 			pItemChnl <- pItem
 			return
 		}
 	}
-	ProduceDB.mu.Unlock()
 	pItemChnl <- ProduceItem{}
 }
 
@@ -129,54 +133,49 @@ func getProduceItem(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func createProduceItem(w http.ResponseWriter, r *http.Request) {
-	var pItem ProduceItem
-
-	_ = json.NewDecoder(r.Body).Decode(&pItem)
-
+func (pItem *ProduceItem) validateProduceItem() url.Values{
+	errs := url.Values{}
 	//all required fields exist
-	if pItem.ProduceCode == "" || pItem.Name == "" || pItem.UnitPrice == "" {
-		http.Error(w, "error 400 - a produce item must contain a code, name, and unit price", 400)
-		return
+	if pItem.ProduceCode == "" {
+		errs.Add("produce_code","produce field is required")
 	}
 
+	if pItem.Name == ""{
+		errs.Add("name","name field is required")
+	}
+
+	if pItem.UnitPrice ==""{
+		errs.Add("unit_price","unit price field is required")
+	}
 	//are all values valid formats
 	pItem.ProduceCode = strings.ToUpper(pItem.ProduceCode)
-	validCode := IsValidProduceCode(pItem.ProduceCode)
-	validPrice := IsValidUnitPrice(pItem.UnitPrice)
-	validName := IsValidName(pItem.Name)
+	if !IsValidProduceCode(pItem.ProduceCode) {
+		errs.Add("produce_code","invalid produce code format")
+	}
 
-	//if field(s) invalid display which
-	if !validCode || !validPrice || !validName {
-		if !validCode && !validPrice && !validName {
-			http.Error(w, "error 400 - invalid produce code, name, and unit price format", 400)
-			return
-		}
-		if !validCode && !validPrice {
-			http.Error(w, "error 400 - invalid produce code and unit price format", 400)
-			return
-		}
-		if !validCode && !validName {
-			http.Error(w, "error 400 - invalid produce code and name format", 400)
-			return
-		}
-		if !validPrice && !validName {
-			http.Error(w, "error 400 - name and unit price format", 400)
-			return
-		}
-		if !validCode {
-			http.Error(w, "error 400 - invalid produce code format", 400)
-			return
-		}
-		if !validPrice {
-			http.Error(w, "error 400 - invalid unit price format", 400)
-			return
-		}
-		if !validName {
-			http.Error(w, "error 400 - invalid name format", 400)
-			return
-		}
+	if !IsValidName(pItem.Name){
+		errs.Add("name","invalid name format")
+	}
 
+	if !IsValidUnitPrice(pItem.UnitPrice){
+		errs.Add("unit_price", "invalid unit price format")
+	}
+	return errs
+}
+
+func createProduceItem(w http.ResponseWriter, r *http.Request) {
+	var pItem ProduceItem
+	defer r.Body.Close()
+
+	if err := json.NewDecoder(r.Body).Decode(&pItem); err != nil{
+		panic(err)
+	}
+
+	validErrs := pItem.validateProduceItem()
+	if len(validErrs) > 0 {
+		err:=map[string]interface{}{"validationError": validErrs}
+		jsonResponse(w,http.StatusBadRequest,err)
+		return
 	}
 
 	pItemChnl := make(chan ProduceItem)

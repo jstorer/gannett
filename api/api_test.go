@@ -10,14 +10,9 @@ import (
 	"testing"
 )
 
-type ProduceTestCode struct {
-	ProduceCode string
+type TestValuesForRegex struct {
+	TestValue string
 	Valid       bool
-}
-
-type UnitPriceTestValues struct {
-	UnitPrice string
-	Valid     bool
 }
 
 var (
@@ -33,79 +28,102 @@ func init() {
 
 
 func TestIsValidProduceCode(t *testing.T) {
-	var testCodes []ProduceTestCode
-
-	//invalid produce code formats
-	testCodes = append(testCodes, ProduceTestCode{"", false})
-	testCodes = append(testCodes, ProduceTestCode{"a", false})
-	testCodes = append(testCodes, ProduceTestCode{"ab", false})
-	testCodes = append(testCodes, ProduceTestCode{"abc", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-12", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-123", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y8", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y8-q", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y8-q1", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y8-q13", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y8-q123a", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y80-q123", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-12340-z9y8-q123", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd0-1234-z9y8-q123", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y8-q123-", false})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y8-q123-abcd", false})
+	var testCodes []TestValuesForRegex
 
 	//valid codes
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-z9y8-q123", true})
-	testCodes = append(testCodes, ProduceTestCode{"abcd-1234-Z9Y8-q12W", true})
-	testCodes = append(testCodes, ProduceTestCode{"1111-2222-3333-4444", true})
-	testCodes = append(testCodes, ProduceTestCode{"aaaa-bbbb-cccc-dddd", true})
-	testCodes = append(testCodes, ProduceTestCode{"AAAA-BBBB-CCCC-DDDD", true})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q123", true})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-Z9Y8-q12W", true})
+	testCodes = append(testCodes, TestValuesForRegex{"1111-2222-3333-4444", true})
+	testCodes = append(testCodes, TestValuesForRegex{"aaaa-bbbb-cccc-dddd", true})
+	testCodes = append(testCodes, TestValuesForRegex{"AAAA-BBBB-CCCC-DDDD", true})
+
+	//invalid produce code formats
+	testCodes = append(testCodes, TestValuesForRegex{"", false})
+	testCodes = append(testCodes, TestValuesForRegex{"a", false})
+	testCodes = append(testCodes, TestValuesForRegex{"ab", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abc", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-12", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-123", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q1", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q13", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q123a", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y80-q123", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-12340-z9y8-q123", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd0-1234-z9y8-q123", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q123-", false})
+	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q123-abcd", false})
 
 	for _, item := range testCodes {
-		assert.Equal(t, item.Valid, IsValidProduceCode(item.ProduceCode), fmt.Sprintf("On Produce Code: `%s`", item.ProduceCode))
+		assert.Equal(t, item.Valid, IsValidProduceCode(item.TestValue), fmt.Sprintf("On Produce Code: `%s`", item.TestValue))
 	}
 }
 
 func TestIsValidUnitPrice(t *testing.T) {
-	var testPrices []UnitPriceTestValues
+	var testPrices []TestValuesForRegex
+	//valid prices
+	testPrices = append(testPrices, TestValuesForRegex{"$0.1", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$0.01", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$1", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$1.0", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$1.00", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$0.10", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$4231", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$4,006", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$4,000.5", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$4,000.93", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$4,000,001.23", true})
+	testPrices = append(testPrices, TestValuesForRegex{"$4,000.00", true})
 
 	//invalid prices
-	testPrices = append(testPrices, UnitPriceTestValues{"", false})
-	testPrices = append(testPrices, UnitPriceTestValues{"0", false})
-	testPrices = append(testPrices, UnitPriceTestValues{"5", false})
-	testPrices = append(testPrices, UnitPriceTestValues{"5.23", false})
-	testPrices = append(testPrices, UnitPriceTestValues{"5.2", false})
-	testPrices = append(testPrices, UnitPriceTestValues{"$", false})
-	testPrices = append(testPrices, UnitPriceTestValues{"$01", false})
-	testPrices = append(testPrices, UnitPriceTestValues{"$01.50", false})
-	testPrices = append(testPrices, UnitPriceTestValues{"$21,12345", false})
-	testPrices = append(testPrices, UnitPriceTestValues{"$5.123", false})
+	testPrices = append(testPrices, TestValuesForRegex{"", false})
+	testPrices = append(testPrices, TestValuesForRegex{"0", false})
+	testPrices = append(testPrices, TestValuesForRegex{"5", false})
+	testPrices = append(testPrices, TestValuesForRegex{"5.23", false})
+	testPrices = append(testPrices, TestValuesForRegex{"5.2", false})
+	testPrices = append(testPrices, TestValuesForRegex{"$", false})
+	testPrices = append(testPrices, TestValuesForRegex{"$01", false})
+	testPrices = append(testPrices, TestValuesForRegex{"$01.50", false})
+	testPrices = append(testPrices, TestValuesForRegex{"$21,12345", false})
+	testPrices = append(testPrices, TestValuesForRegex{"$5.123", false})
 
-	//valid prices
-	testPrices = append(testPrices, UnitPriceTestValues{"$0.1", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$0.01", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$1", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$1.0", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$1.00", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$0.10", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$4231", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$4,006", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$4,000.5", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$4,000.93", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$4,000,001.23", true})
-	testPrices = append(testPrices, UnitPriceTestValues{"$4,000.00", true})
 
 	for _, item := range testPrices {
-		assert.Equal(t, item.Valid, IsValidUnitPrice(item.UnitPrice), fmt.Sprintf("On Unit Price: `%s`", item.UnitPrice))
+		assert.Equal(t, item.Valid, IsValidUnitPrice(item.TestValue), fmt.Sprintf("On Unit Price: `%s`", item.TestValue))
 	}
 
+}
+
+func TestIsValidName(t *testing.T) {
+	var testNames []TestValuesForRegex
+
+	//valid
+	testNames = append(testNames, TestValuesForRegex{"A", true})
+	testNames = append(testNames, TestValuesForRegex{"A A", true})
+	testNames = append(testNames, TestValuesForRegex{"Milk", true})
+	testNames = append(testNames, TestValuesForRegex{"Cow Milk", true})
+	testNames = append(testNames, TestValuesForRegex{"Cow Milk 12", true})
+	testNames = append(testNames, TestValuesForRegex{"cow milk 12", true})
+
+
+	//invalid
+	testNames = append(testNames, TestValuesForRegex{"", false})
+	testNames = append(testNames, TestValuesForRegex{" ", false})
+	testNames = append(testNames, TestValuesForRegex{" a", false})
+	testNames = append(testNames, TestValuesForRegex{"m!lk", false})
+
+	for _, item := range testNames {
+		assert.Equal(t, item.Valid, IsValidName(item.TestValue), fmt.Sprintf("On Unit Price: `%s`", item.TestValue))
+	}
 }
 
 func TestGetAllProduce(t *testing.T) {
@@ -393,4 +411,84 @@ func TestDeleteProduceItem(t *testing.T) {
 		t.Errorf("404 Not found expected but %d returned", response.StatusCode)
 	}
 
+}
+
+func TestValidateProduceItem(t *testing.T){
+	//Valid
+	var pItem ProduceItem
+	pItem.ProduceCode = "1111-1111-1111-1111"
+	pItem.Name = "milk"
+	pItem.UnitPrice = "$1.00"
+	errs := pItem.validateProduceItem()
+
+	if len(errs) != 0{
+		t.Errorf("0 errors expected but %d returned", len(errs))
+	}
+
+	//Invalid all empty fields
+	pItem = ProduceItem{}
+	pItem.ProduceCode = ""
+	pItem.Name = ""
+	pItem.UnitPrice = ""
+	errs = pItem.validateProduceItem()
+
+	if len(errs) != 3{
+		t.Errorf("3 errors expected but %d returned", len(errs))
+	}
+
+	//Invalid name and unit price empty fields
+	pItem = ProduceItem{}
+	pItem.ProduceCode = "aaaa-bbbb-1111-2222"
+	pItem.Name = ""
+	pItem.UnitPrice = ""
+	errs = pItem.validateProduceItem()
+
+	if len(errs) != 2{
+		t.Errorf("2 errors expected but %d returned", len(errs))
+	}
+
+	//Invalid unit price empty fields
+	pItem = ProduceItem{}
+	pItem.ProduceCode = "aaaa-bbbb-1111-2222"
+	pItem.Name = "milk"
+	pItem.UnitPrice = ""
+	errs = pItem.validateProduceItem()
+
+	if len(errs) != 1{
+		t.Errorf("1 error expected but %d returned", len(errs))
+	}
+
+
+	//Invalid produce code format
+	pItem = ProduceItem{}
+	pItem.ProduceCode = "1111-1111-1111"
+	pItem.Name = "milk"
+	pItem.UnitPrice = "$1.00"
+	errs = pItem.validateProduceItem()
+
+	if len(errs) != 1{
+		t.Errorf("1 errors expected but %d returned", len(errs))
+	}
+
+	//Invalid name format
+	pItem = ProduceItem{}
+	pItem.ProduceCode = "1111-1111-1111-1111"
+	pItem.Name = "m@ilk"
+	pItem.UnitPrice = "$1.00"
+	errs = pItem.validateProduceItem()
+
+	if len(errs) != 1{
+		t.Errorf("1 errors expected but %d returned", len(errs))
+	}
+
+	//Invalid unit price format
+	pItem = ProduceItem{}
+	pItem.ProduceCode = "1111-1111-1111-1111"
+	pItem.Name = "milk"
+	pItem.UnitPrice = "1.00"
+	errs = pItem.validateProduceItem()
+
+	if len(errs) != 1{
+		t.Errorf("1 errors expected but %d returned", len(errs))
+	}
 }
