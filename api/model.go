@@ -53,17 +53,18 @@ func writeNewProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
 func writeUpdateProduceItem(pCode string, pItem ProduceItem, pItemChnl chan ProduceItem) {
 	ProduceDB.mu.Lock()
 	defer ProduceDB.mu.Unlock()
-	println(pCode)
 
 	pItem.ProduceCode = strings.ToUpper(pItem.ProduceCode)
-	for _, item := range ProduceDB.Data {
-		if item.ProduceCode == pItem.ProduceCode {
-			pItemChnl <- ProduceItem{ProduceCode: "0"}
-			return
-		}
-	}
+	pCode = strings.ToUpper(pCode)
+
 	for index, item := range ProduceDB.Data {
-		if item.ProduceCode == pItem.ProduceCode {
+		if item.ProduceCode == pCode {
+			for _, item := range ProduceDB.Data {
+				if item.ProduceCode == pItem.ProduceCode && pCode != pItem.ProduceCode {
+					pItemChnl <- ProduceItem{ProduceCode: "0"}
+					return
+				}
+			}
 			ProduceDB.Data[index].ProduceCode = pItem.ProduceCode
 			ProduceDB.Data[index].Name = pItem.Name
 			ProduceDB.Data[index].UnitPrice = pItem.UnitPrice

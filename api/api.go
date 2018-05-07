@@ -136,7 +136,7 @@ func updateProduceItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsonResponse(w, http.StatusCreated, pItem)
+	jsonResponse(w, http.StatusOK, pItem)
 
 }
 

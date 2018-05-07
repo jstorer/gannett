@@ -26,6 +26,13 @@ func init() {
 	produceUrl = fmt.Sprintf("%s/api/produce", server.URL)
 }
 
+func initTest(){
+	ProduceDB.Data = nil
+	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "A12T-4GH7-QPL9-3N4M", Name: "Lettuce", UnitPrice: "$3.46"})
+	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "E5T6-9UI3-TH15-QR88", Name: "Peach", UnitPrice: "$2.99"})
+	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "YRT6-72AS-K736-L4AR", Name: "Green Pepper", UnitPrice: "$0.79"})
+	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "TQ4C-VV6T-75ZX-1RMR", Name: "Gala Apple", UnitPrice: "$3.59"})
+}
 
 func TestIsValidProduceCode(t *testing.T) {
 	var testCodes []TestValuesForRegex
@@ -127,7 +134,7 @@ func TestIsValidName(t *testing.T) {
 }
 
 func TestGetAllProduce(t *testing.T) {
-	Initialize()
+	initTest()
 	request, err := http.NewRequest("GET", produceUrl, nil)
 	response, err := http.DefaultClient.Do(request)
 
@@ -141,7 +148,7 @@ func TestGetAllProduce(t *testing.T) {
 }
 
 func TestGetProduceItem(t *testing.T) {
-	Initialize()
+	initTest()
 	//VALID TEST----------------------------------------------------------
 	//Get item
 	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "ABCD-1234-EFGH-5678", Name: "Black Beans", UnitPrice: "$2.25"})
@@ -183,8 +190,104 @@ func TestGetProduceItem(t *testing.T) {
 
 }
 
+func TestUpdateProduceItem(t *testing.T){
+	initTest()
+
+	//valid
+	//unchanging produce code
+	produceItemJson := `{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"Lettuce","unit_price":"$3.46"}`
+	reader = strings.NewReader(produceItemJson)
+	request, err := http.NewRequest("PUT", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl), reader)
+	response, err := http.DefaultClient.Do(request)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if response.StatusCode != 200 {
+		t.Errorf("200 Created expected but %d returned", response.StatusCode)
+	}
+
+	//check if values push to DB
+	produceItemJson = `{"produce_code":"A12T-4GH7-QPL9-1111","name":"Cheese","unit_price":"$5.00"}`
+	reader = strings.NewReader(produceItemJson)
+	request, err = http.NewRequest("PUT", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl), reader)
+	response, err = http.DefaultClient.Do(request)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if ProduceDB.Data[0].ProduceCode != "A12T-4GH7-QPL9-1111" || ProduceDB.Data[0].Name != "Cheese" || ProduceDB.Data[0].UnitPrice != "$5.00"{
+		t.Errorf("failed to push update to DB")
+	}
+
+	if response.StatusCode != 200 {
+		t.Errorf("200 Created expected but %d returned", response.StatusCode)
+	}
+
+	//invalid
+	//updated code already exists
+	initTest()
+	produceItemJson = `{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"Cheese","unit_price":"$5.00"}`
+	reader = strings.NewReader(produceItemJson)
+	request, err = http.NewRequest("PUT", fmt.Sprintf("%s/E5T6-9UI3-TH15-QR88", produceUrl), reader)
+	response, err = http.DefaultClient.Do(request)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if response.StatusCode != 409 {
+		t.Errorf("409 conflict expected but %d returned", response.StatusCode)
+	}
+
+	//Produce code doesnt exist to update
+	produceItemJson = `{"produce_code":"A12T-4GH7-QPL9-3N4A","name":"Cheese","unit_price":"$5.00"}`
+	reader = strings.NewReader(produceItemJson)
+	request, err = http.NewRequest("PUT", fmt.Sprintf("%s/E5T6-9UI3-TH15-1111", produceUrl), reader)
+	response, err = http.DefaultClient.Do(request)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if response.StatusCode != 404 {
+		t.Errorf("404 produce code not found expected but %d returned", response.StatusCode)
+	}
+
+	//invalid produce code end point
+	produceItemJson = `{"produce_code":"A12T-4GH7-QPL9-3N4A","name":"Cheese","unit_price":"$5.00"}`
+	reader = strings.NewReader(produceItemJson)
+	request, err = http.NewRequest("PUT", fmt.Sprintf("%s/E5T6-9UI3-TH15-111", produceUrl), reader)
+	response, err = http.DefaultClient.Do(request)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if response.StatusCode != 400 {
+		t.Errorf("400 bad request expected but %d returned", response.StatusCode)
+	}
+
+	//bad payload
+	produceItemJson = `{"produce_code":"A12T-4GH7-QPL9-3NM","name":"Cheese","unit_price":"$5.00"}`
+	reader = strings.NewReader(produceItemJson)
+	request, err = http.NewRequest("PUT", fmt.Sprintf("%s/E5T6-9UI3-TH15-QR88", produceUrl), reader)
+	response, err = http.DefaultClient.Do(request)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if response.StatusCode != 400 {
+		t.Errorf("400 bad request expected but %d returned", response.StatusCode)
+	}
+
+}
+
 func TestCreateProduceItem(t *testing.T) {
-	Initialize()
+	initTest()
 	//VALID TEST----------------------------------------------------------
 	//Check if valid produce item created
 	produceItemJson := `{"produce_code":"abcd-1234-EFGH-5I6J","name":"Cheese","unit_price":"$9.99"}`
@@ -371,7 +474,7 @@ func TestCreateProduceItem(t *testing.T) {
 }
 
 func TestDeleteProduceItem(t *testing.T) {
-	Initialize()
+	initTest()
 	//VALID TEST----------------------------------------------------------
 	//Delete item
 	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "ABCD-1234-EFGH-5678", Name: "Black Beans", UnitPrice: "$2.25"})
