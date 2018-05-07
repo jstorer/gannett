@@ -9,9 +9,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 
-
 after_success:
-  - docker run --rm -v "$PWD":/go/src/github.com/jstorer/gannett -w /go/src/github.com/jstorer/gannett iron/go:dev go build -o supermarket
   - docker build -t jstorer/gannett .
   - docker ps -a
   - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin

@@ -219,9 +219,9 @@ func deleteProduceItem(w http.ResponseWriter, r *http.Request) {
 
 func Handlers() *mux.Router {
 	router := mux.NewRouter()
-	router.HandleFunc("/produce", getAllProduce).Methods("GET")
-	router.HandleFunc("/produce/{produce_code}", getProduceItem).Methods("GET")
-	router.HandleFunc("/produce", createProduceItem).Methods("POST")
-	router.HandleFunc("/produce/{produce_code}", deleteProduceItem).Methods("DELETE")
+	router.HandleFunc("/api/produce", getAllProduce).Methods("GET")
+	router.HandleFunc("/api/produce/{produce_code}", getProduceItem).Methods("GET")
+	router.HandleFunc("/api/produce", createProduceItem).Methods("POST")
+	router.HandleFunc("/api/produce/{produce_code}", deleteProduceItem).Methods("DELETE")
 	return router
 }

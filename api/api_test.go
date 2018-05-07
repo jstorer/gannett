@@ -23,7 +23,7 @@ var (
 
 func init() {
 	server = httptest.NewServer(Handlers())
-	produceUrl = fmt.Sprintf("%s/produce", server.URL)
+	produceUrl = fmt.Sprintf("%s/api/produce", server.URL)
 }
 
 
