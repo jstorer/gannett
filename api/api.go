@@ -6,17 +6,31 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+
 )
 
 var ProduceDB DBObject
+var TestingMode bool
+var TestDB DBObject
+var currentDB DBObject
+
+func init() {
+	if TestingMode == true{
+		currentDB = ProduceDB
+	}else{
+		currentDB = TestDB
+	}
+}
 
 func Initialize() {
 	//init DB to indicated default values
 	ProduceDB.Data = nil
-	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "A12T-4GH7-QPL9-3N4M", Name: "Lettuce", UnitPrice: "$3.46"})
-	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "E5T6-9UI3-TH15-QR88", Name: "Peach", UnitPrice: "$2.99"})
-	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "YRT6-72AS-K736-L4AR", Name: "Green Pepper", UnitPrice: "$0.79"})
-	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "TQ4C-VV6T-75ZX-1RMR", Name: "Gala Apple", UnitPrice: "$3.59"})
+	ProduceDB.Data = []ProduceItem{
+		{"A12T-4GH7-QPL9-3N4M","Lettuce","$3.46"},
+		{"E5T6-9UI3-TH15-QR88","Peach","$2.99"},
+		{"YRT6-72AS-K736-L4AR","Green Pepper","$0.79"},
+		{"TQ4C-VV6T-75ZX-1RMR","Gala Apple","$3.59"},
+	}
 }
 
 func IsValidProduceCode(produceCode string) bool {

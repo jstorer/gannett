@@ -8,12 +8,9 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"io/ioutil"
 )
 
-type TestValuesForRegex struct {
-	TestValue string
-	Valid       bool
-}
 
 var (
 	server     *httptest.Server
@@ -24,127 +21,141 @@ var (
 func init() {
 	server = httptest.NewServer(Handlers())
 	produceUrl = fmt.Sprintf("%s/api/produce", server.URL)
+	TestingMode = true
 }
 
-func initTest(){
-	ProduceDB.Data = nil
-	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "A12T-4GH7-QPL9-3N4M", Name: "Lettuce", UnitPrice: "$3.46"})
-	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "E5T6-9UI3-TH15-QR88", Name: "Peach", UnitPrice: "$2.99"})
-	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "YRT6-72AS-K736-L4AR", Name: "Green Pepper", UnitPrice: "$0.79"})
-	ProduceDB.Data = append(ProduceDB.Data, ProduceItem{ProduceCode: "TQ4C-VV6T-75ZX-1RMR", Name: "Gala Apple", UnitPrice: "$3.59"})
+func initTest() {
+	TestDB.Data = nil
+	TestDB.Data = []ProduceItem{
+		{"A12T-4GH7-QPL9-3N4M","Lettuce","$3.46"},
+		{"E5T6-9UI3-TH15-QR88","Peach","$2.99"},
+		{"YRT6-72AS-K736-L4AR","Green Pepper","$0.79"},
+		{"TQ4C-VV6T-75ZX-1RMR","Gala Apple","$3.59"},
+	}
 }
 
 func TestIsValidProduceCode(t *testing.T) {
-	var testCodes []TestValuesForRegex
-
-	//valid codes
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q123", true})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-Z9Y8-q12W", true})
-	testCodes = append(testCodes, TestValuesForRegex{"1111-2222-3333-4444", true})
-	testCodes = append(testCodes, TestValuesForRegex{"aaaa-bbbb-cccc-dddd", true})
-	testCodes = append(testCodes, TestValuesForRegex{"AAAA-BBBB-CCCC-DDDD", true})
-
-	//invalid produce code formats
-	testCodes = append(testCodes, TestValuesForRegex{"", false})
-	testCodes = append(testCodes, TestValuesForRegex{"a", false})
-	testCodes = append(testCodes, TestValuesForRegex{"ab", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abc", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-12", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-123", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q1", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q13", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q123a", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y80-q123", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-12340-z9y8-q123", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd0-1234-z9y8-q123", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q123-", false})
-	testCodes = append(testCodes, TestValuesForRegex{"abcd-1234-z9y8-q123-abcd", false})
+	var testCodes = []struct{
+		value string
+		valid bool
+	}{
+		{"abcd-1234-z9y8-q123", true},
+		{"abcd-1234-Z9Y8-q12W", true},
+		{"1111-2222-3333-4444", true},
+		{"aaaa-bbbb-cccc-dddd", true},
+		{"AAAA-BBBB-CCCC-DDDD", true},
+		{"", false},
+		{"a", false},
+		{"ab", false},
+		{"abc", false},
+		{"abcd", false},
+		{"abcd-", false},
+		{"abcd-1", false},
+		{"abcd-12", false},
+		{"abcd-123", false},
+		{"abcd-1234", false},
+		{"abcd-1234-", false},
+		{"abcd-1234-z", false},
+		{"abcd-1234-z9", false},
+		{"abcd-1234-z9y", false},
+		{"abcd-1234-z9y8", false},
+		{"abcd-1234-z9y8-q", false},
+		{"abcd-1234-z9y8-q1", false},
+		{"abcd-1234-z9y8-q13", false},
+		{"abcd-1234-z9y8-q123a", false},
+		{"abcd-1234-z9y80-q123", false},
+		{"abcd-12340-z9y8-q123", false},
+		{"abcd0-1234-z9y8-q123", false},
+		{"abcd-1234-z9y8-q123-", false},
+		{"abcd-1234-z9y8-q123-abcd", false},
+	}
 
 	for _, item := range testCodes {
-		assert.Equal(t, item.Valid, IsValidProduceCode(item.TestValue), fmt.Sprintf("On Produce Code: `%s`", item.TestValue))
+		assert.Equal(t, item.valid, IsValidProduceCode(item.value), fmt.Sprintf("On Produce Code: `%s`", item.value))
 	}
 }
 
 func TestIsValidUnitPrice(t *testing.T) {
-	var testPrices []TestValuesForRegex
-	//valid prices
-	testPrices = append(testPrices, TestValuesForRegex{"$0.1", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$0.01", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$1", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$1.0", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$1.00", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$0.10", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$4231", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$4,006", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$4,000.5", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$4,000.93", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$4,000,001.23", true})
-	testPrices = append(testPrices, TestValuesForRegex{"$4,000.00", true})
-
-	//invalid prices
-	testPrices = append(testPrices, TestValuesForRegex{"", false})
-	testPrices = append(testPrices, TestValuesForRegex{"0", false})
-	testPrices = append(testPrices, TestValuesForRegex{"5", false})
-	testPrices = append(testPrices, TestValuesForRegex{"5.23", false})
-	testPrices = append(testPrices, TestValuesForRegex{"5.2", false})
-	testPrices = append(testPrices, TestValuesForRegex{"$", false})
-	testPrices = append(testPrices, TestValuesForRegex{"$01", false})
-	testPrices = append(testPrices, TestValuesForRegex{"$01.50", false})
-	testPrices = append(testPrices, TestValuesForRegex{"$21,12345", false})
-	testPrices = append(testPrices, TestValuesForRegex{"$5.123", false})
-
+	var testPrices = []struct {
+		value string
+		valid bool
+	}{
+		{"$0.1", true},
+		{"$0.01", true},
+		{"$1", true},
+		{"$1.0", true},
+		{"$1.00", true},
+		{"$0.10", true},
+		{"$4231", true},
+		{"$4,006", true},
+		{"$4,000.5", true},
+		{"$4,000.93", true},
+		{"$4,000,001.23", true},
+		{"$4,000.00", true},
+		{"", false},
+		{"0", false},
+		{"5", false},
+		{"5.23", false},
+		{"5.2", false},
+		{"$", false},
+		{"$01", false},
+		{"$01.50", false},
+		{"$21,12345", false},
+		{"$5.123", false},
+	}
 
 	for _, item := range testPrices {
-		assert.Equal(t, item.Valid, IsValidUnitPrice(item.TestValue), fmt.Sprintf("On Unit Price: `%s`", item.TestValue))
+		assert.Equal(t, item.valid, IsValidUnitPrice(item.value), fmt.Sprintf("On Unit Price: `%s`", item.value))
 	}
 
 }
 
 func TestIsValidName(t *testing.T) {
-	var testNames []TestValuesForRegex
-
-	//valid
-	testNames = append(testNames, TestValuesForRegex{"A", true})
-	testNames = append(testNames, TestValuesForRegex{"A A", true})
-	testNames = append(testNames, TestValuesForRegex{"Milk", true})
-	testNames = append(testNames, TestValuesForRegex{"Cow Milk", true})
-	testNames = append(testNames, TestValuesForRegex{"Cow Milk 12", true})
-	testNames = append(testNames, TestValuesForRegex{"cow milk 12", true})
-
-
-	//invalid
-	testNames = append(testNames, TestValuesForRegex{"", false})
-	testNames = append(testNames, TestValuesForRegex{" ", false})
-	testNames = append(testNames, TestValuesForRegex{" a", false})
-	testNames = append(testNames, TestValuesForRegex{"m!lk", false})
-
+	var testNames = []struct {
+		value string
+		valid bool
+	}{
+		{"A", true},
+		{"A A", true},
+		{"Milk", true},
+		{"Cow Milk", true},
+		{"Cow Milk 12", true},
+		{"cow milk 12", true},
+		{"", false},
+		{" ", false},
+		{" a", false},
+		{"m!lk", false},
+	}
 	for _, item := range testNames {
-		assert.Equal(t, item.Valid, IsValidName(item.TestValue), fmt.Sprintf("On Unit Price: `%s`", item.TestValue))
+		assert.Equal(t, item.valid, IsValidName(item.value), fmt.Sprintf("On Unit Price: `%s`", item.value))
 	}
 }
 
 func TestGetAllProduce(t *testing.T) {
 	initTest()
-	request, err := http.NewRequest("GET", produceUrl, nil)
-	response, err := http.DefaultClient.Do(request)
-
-	if err != nil {
-		t.Error(err)
+	var getAllTests = []struct{
+		desc string
+		method string
+		path string
+		statusCode int
+		expectedBody string
+	}{
+		{"all items payload from initTest()","GET",produceUrl,200,`[{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"Lettuce","unit_price":"$3.46"},{"produce_code":"E5T6-9UI3-TH15-QR88","name":"Peach","unit_price":"$2.99"},{"produce_code":"YRT6-72AS-K736-L4AR","name":"Green Pepper","unit_price":"$0.79"},{"produce_code":"TQ4C-VV6T-75ZX-1RMR","name":"Gala Apple","unit_price":"$3.59"}]`},
 	}
 
-	if response.StatusCode != 200 {
-		t.Errorf("200 OK expected but %d returned", response.StatusCode)
+	for _, item := range getAllTests{
+		request, err := http.NewRequest(item.method, item.path, nil)
+		response, err := http.DefaultClient.Do(request)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		responseData,_:=ioutil.ReadAll(response.Body)
+		assert.Equal(t,item.expectedBody,string(responseData),fmt.Sprintf("unexpected response for %s",item.desc))
+		assert.Equal(t,item.statusCode,response.StatusCode,"unexpected status code")
 	}
+
 }
 
 func TestGetProduceItem(t *testing.T) {
@@ -190,7 +201,7 @@ func TestGetProduceItem(t *testing.T) {
 
 }
 
-func TestUpdateProduceItem(t *testing.T){
+func TestUpdateProduceItem(t *testing.T) {
 	initTest()
 
 	//valid
@@ -218,7 +229,7 @@ func TestUpdateProduceItem(t *testing.T){
 		t.Error(err)
 	}
 
-	if ProduceDB.Data[0].ProduceCode != "A12T-4GH7-QPL9-1111" || ProduceDB.Data[0].Name != "Cheese" || ProduceDB.Data[0].UnitPrice != "$5.00"{
+	if ProduceDB.Data[0].ProduceCode != "A12T-4GH7-QPL9-1111" || ProduceDB.Data[0].Name != "Cheese" || ProduceDB.Data[0].UnitPrice != "$5.00" {
 		t.Errorf("failed to push update to DB")
 	}
 
@@ -516,7 +527,7 @@ func TestDeleteProduceItem(t *testing.T) {
 
 }
 
-func TestValidateProduceItem(t *testing.T){
+func TestValidateProduceItem(t *testing.T) {
 	//Valid
 	var pItem ProduceItem
 	pItem.ProduceCode = "1111-1111-1111-1111"
@@ -524,7 +535,7 @@ func TestValidateProduceItem(t *testing.T){
 	pItem.UnitPrice = "$1.00"
 	errs := pItem.validateProduceItem()
 
-	if len(errs) != 0{
+	if len(errs) != 0 {
 		t.Errorf("0 errors expected but %d returned", len(errs))
 	}
 
@@ -535,7 +546,7 @@ func TestValidateProduceItem(t *testing.T){
 	pItem.UnitPrice = ""
 	errs = pItem.validateProduceItem()
 
-	if len(errs) != 3{
+	if len(errs) != 3 {
 		t.Errorf("3 errors expected but %d returned", len(errs))
 	}
 
@@ -546,7 +557,7 @@ func TestValidateProduceItem(t *testing.T){
 	pItem.UnitPrice = ""
 	errs = pItem.validateProduceItem()
 
-	if len(errs) != 2{
+	if len(errs) != 2 {
 		t.Errorf("2 errors expected but %d returned", len(errs))
 	}
 
@@ -557,10 +568,9 @@ func TestValidateProduceItem(t *testing.T){
 	pItem.UnitPrice = ""
 	errs = pItem.validateProduceItem()
 
-	if len(errs) != 1{
+	if len(errs) != 1 {
 		t.Errorf("1 error expected but %d returned", len(errs))
 	}
-
 
 	//Invalid produce code format
 	pItem = ProduceItem{}
@@ -569,7 +579,7 @@ func TestValidateProduceItem(t *testing.T){
 	pItem.UnitPrice = "$1.00"
 	errs = pItem.validateProduceItem()
 
-	if len(errs) != 1{
+	if len(errs) != 1 {
 		t.Errorf("1 errors expected but %d returned", len(errs))
 	}
 
@@ -580,7 +590,7 @@ func TestValidateProduceItem(t *testing.T){
 	pItem.UnitPrice = "$1.00"
 	errs = pItem.validateProduceItem()
 
-	if len(errs) != 1{
+	if len(errs) != 1 {
 		t.Errorf("1 errors expected but %d returned", len(errs))
 	}
 
@@ -591,7 +601,7 @@ func TestValidateProduceItem(t *testing.T){
 	pItem.UnitPrice = "1.00"
 	errs = pItem.validateProduceItem()
 
-	if len(errs) != 1{
+	if len(errs) != 1 {
 		t.Errorf("1 errors expected but %d returned", len(errs))
 	}
 }
