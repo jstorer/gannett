@@ -204,22 +204,22 @@ func TestUpdateProduceItem(t *testing.T) {
 		unitPrice    string
 		expectedBody string
 	}{
-		{"produce code remains same", "POST", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl),
+		{"produce code remains same", "PUT", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl),
 			200, "A12T-4GH7-QPL9-3N4M", "Lettuce", "$3.46", `{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"Lettuce","unit_price":"$3.46"}`},
 		//
-		{"push to db check", "POST", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl),
+		{"push to db check", "PUT", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl),
 			200, "A12T-4GH7-QPL9-1111", "Cheese", "$5.00", `{"produce_code":"A12T-4GH7-QPL9-1111","name":"Cheese","unit_price":"$5.00"}`},
 		//
-		{"updated code already exists", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-QR88", produceUrl),
+		{"updated code already exists", "PUT", fmt.Sprintf("%s/E5T6-9UI3-TH15-QR88", produceUrl),
 			409, "2222-2222-2222-2222", "Cheese", "$5.00", "error 409 - updated produce code value already exists\n"},
 		//
-		{"produce code doesn't exist to update", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-1111", produceUrl),
+		{"produce code doesn't exist to update", "PUT", fmt.Sprintf("%s/E5T6-9UI3-TH15-1111", produceUrl),
 			404, "A12T-4GH7-QPL9-3N4A", "Cheese", "$5.00", "error 404 - produce code does not exist\n"},
 		//
-		{"invalid end point", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-111", produceUrl),
+		{"invalid end point", "PUT", fmt.Sprintf("%s/E5T6-9UI3-TH15-111", produceUrl),
 			400, "", "", "", "error 400 - invalid produce code format\n"},
 		//
-		{"bad payload", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-QR88", produceUrl),
+		{"bad payload", "PUT", fmt.Sprintf("%s/E5T6-9UI3-TH15-QR88", produceUrl),
 			400, "A12T-4GH7-QPL9-3NM", "", "5.00",
 			`{"validationError":{"name":["name field is required","invalid name format"],"produce_code":["invalid produce code format"],"unit_price":["invalid unit price format"]}}`},
 	}
