@@ -8,17 +8,28 @@ import (
 	"strings"
 )
 
-var ProduceDB DBObject
+var prodDB DBObject
+var testDB DBObject
+var currentDB *DBObject
 
-func Initialize() {
-	ProduceDB.Data = nil
-	ProduceDB.Data = []ProduceItem{
-		{"A12T-4GH7-QPL9-3N4M", "Lettuce", "$3.46"},
-		{"E5T6-9UI3-TH15-QR88", "Peach", "$2.99"},
-		{"YRT6-72AS-K736-L4AR", "Green Pepper", "$0.79"},
-		{"TQ4C-VV6T-75ZX-1RMR", "Gala Apple", "$3.59"},
+func Initialize(isTesting bool) {
+	if isTesting {
+		currentDB = &testDB
+		currentDB.Data = []ProduceItem{
+			{"A12T-4GH7-QPL9-3N4M", "Lettuce", "$3.46"},
+			{"E5T6-9UI3-TH15-QR88", "Peach", "$2.99"},
+			{"YRT6-72AS-K736-L4AR", "Green Pepper", "$0.79"},
+			{"2222-2222-2222-2222", "Gala Apple", "$3.59"},
+		}
+	} else {
+		currentDB = &prodDB
+		currentDB.Data = []ProduceItem{
+			{"A12T-4GH7-QPL9-3N4M", "Lettuce", "$3.46"},
+			{"E5T6-9UI3-TH15-QR88", "Peach", "$2.99"},
+			{"YRT6-72AS-K736-L4AR", "Green Pepper", "$0.79"},
+			{"TQ4C-VV6T-75ZX-1RMR", "Gala Apple", "$3.59"},
+		}
 	}
-
 }
 
 func IsValidProduceCode(produceCode string) bool {

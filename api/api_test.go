@@ -21,11 +21,11 @@ var (
 func init() {
 	server = httptest.NewServer(Handlers())
 	produceUrl = fmt.Sprintf("%s/api/produce", server.URL)
+	Initialize(true)
 }
 
-func initTest() {
-	ProduceDB.Data = nil
-	ProduceDB.Data = []ProduceItem{
+func reinitTest() {
+	currentDB.Data = []ProduceItem{
 		{"A12T-4GH7-QPL9-3N4M", "Lettuce", "$3.46"},
 		{"E5T6-9UI3-TH15-QR88", "Peach", "$2.99"},
 		{"YRT6-72AS-K736-L4AR", "Green Pepper", "$0.79"},
@@ -131,7 +131,7 @@ func TestIsValidName(t *testing.T) {
 }
 
 func TestGetAllProduce(t *testing.T) {
-	initTest()
+	reinitTest()
 	var getAllTests = []struct {
 		desc         string
 		method       string
@@ -139,7 +139,7 @@ func TestGetAllProduce(t *testing.T) {
 		statusCode   int
 		expectedBody string
 	}{
-		{"all items payload from initTest()", "GET", produceUrl,
+		{"all items payload from reinitTest()", "GET", produceUrl,
 			200, `[{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"Lettuce","unit_price":"$3.46"},{"produce_code":"E5T6-9UI3-TH15-QR88","name":"Peach","unit_price":"$2.99"},{"produce_code":"YRT6-72AS-K736-L4AR","name":"Green Pepper","unit_price":"$0.79"},{"produce_code":"2222-2222-2222-2222","name":"Gala Apple","unit_price":"$3.59"}]`},
 	}
 
@@ -159,7 +159,7 @@ func TestGetAllProduce(t *testing.T) {
 }
 
 func TestGetProduceItem(t *testing.T) {
-	initTest()
+	reinitTest()
 	var getItemTests = []struct {
 		desc         string
 		method       string
@@ -193,7 +193,7 @@ func TestGetProduceItem(t *testing.T) {
 }
 
 func TestUpdateProduceItem(t *testing.T) {
-	initTest()
+	reinitTest()
 	var updateItemTests = []struct {
 		desc         string
 		method       string
@@ -241,7 +241,7 @@ func TestUpdateProduceItem(t *testing.T) {
 }
 
 func TestCreateProduceItem(t *testing.T) {
-	initTest()
+	reinitTest()
 	var createItemTests = []struct {
 		desc         string
 		method       string
@@ -285,7 +285,7 @@ func TestCreateProduceItem(t *testing.T) {
 }
 
 func TestDeleteProduceItem(t *testing.T) {
-	initTest()
+	reinitTest()
 	var deleteItemTests = []struct {
 		desc         string
 		method       string

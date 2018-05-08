@@ -18,15 +18,15 @@ type DBObject struct {
 }
 
 func readAllProduceItems(sendchannel chan<- []ProduceItem) {
-	ProduceDB.mu.RLock()
-	defer ProduceDB.mu.RUnlock()
-	sendchannel <- ProduceDB.Data
+	currentDB.mu.RLock()
+	defer currentDB.mu.RUnlock()
+	sendchannel <- currentDB.Data
 }
 
 func readProduceItem(pCode string, sendchannel chan<- ProduceItem) {
-	ProduceDB.mu.RLock()
-	defer ProduceDB.mu.RUnlock()
-	for _, item := range ProduceDB.Data {
+	currentDB.mu.RLock()
+	defer currentDB.mu.RUnlock()
+	for _, item := range currentDB.Data {
 		if item.ProduceCode == pCode {
 			sendchannel <- item
 			return
@@ -36,38 +36,38 @@ func readProduceItem(pCode string, sendchannel chan<- ProduceItem) {
 }
 
 func writeNewProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
-	ProduceDB.mu.Lock()
-	defer ProduceDB.mu.Unlock()
+	currentDB.mu.Lock()
+	defer currentDB.mu.Unlock()
 
 	pItem.ProduceCode = strings.ToUpper(pItem.ProduceCode)
-	for _, item := range ProduceDB.Data {
+	for _, item := range currentDB.Data {
 		if item.ProduceCode == pItem.ProduceCode {
 			pItemChnl <- ProduceItem{}
 			return
 		}
 	}
-	ProduceDB.Data = append(ProduceDB.Data, pItem)
+	currentDB.Data = append(currentDB.Data, pItem)
 	pItemChnl <- pItem
 }
 
 func writeUpdateProduceItem(pCode string, pItem ProduceItem, pItemChnl chan ProduceItem) {
-	ProduceDB.mu.Lock()
-	defer ProduceDB.mu.Unlock()
+	currentDB.mu.Lock()
+	defer currentDB.mu.Unlock()
 
 	pItem.ProduceCode = strings.ToUpper(pItem.ProduceCode)
 	pCode = strings.ToUpper(pCode)
 
-	for index, item := range ProduceDB.Data {
+	for index, item := range currentDB.Data {
 		if item.ProduceCode == pCode {
-			for _, item := range ProduceDB.Data {
+			for _, item := range currentDB.Data {
 				if item.ProduceCode == pItem.ProduceCode && pCode != pItem.ProduceCode {
 					pItemChnl <- ProduceItem{ProduceCode: "0"}
 					return
 				}
 			}
-			ProduceDB.Data[index].ProduceCode = pItem.ProduceCode
-			ProduceDB.Data[index].Name = pItem.Name
-			ProduceDB.Data[index].UnitPrice = pItem.UnitPrice
+			currentDB.Data[index].ProduceCode = pItem.ProduceCode
+			currentDB.Data[index].Name = pItem.Name
+			currentDB.Data[index].UnitPrice = pItem.UnitPrice
 			pItemChnl <- pItem
 			return
 		}
@@ -77,12 +77,12 @@ func writeUpdateProduceItem(pCode string, pItem ProduceItem, pItemChnl chan Prod
 }
 
 func removeProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
-	ProduceDB.mu.Lock()
-	defer ProduceDB.mu.Unlock()
+	currentDB.mu.Lock()
+	defer currentDB.mu.Unlock()
 
-	for index, item := range ProduceDB.Data {
+	for index, item := range currentDB.Data {
 		if item.ProduceCode == pItem.ProduceCode {
-			ProduceDB.Data = append(ProduceDB.Data[:index], ProduceDB.Data[index+1:]...)
+			currentDB.Data = append(currentDB.Data[:index], currentDB.Data[index+1:]...)
 			pItemChnl <- pItem
 			return
 		}

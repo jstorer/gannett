@@ -10,6 +10,6 @@ import (
 
 func main() {
 	fmt.Println("...Supermarket Server Starting...")
-	api.Initialize()
+	api.Initialize(false)
 	log.Fatal(http.ListenAndServe(":8080", api.Handlers()))
 }

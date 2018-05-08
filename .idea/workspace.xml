@@ -4,6 +4,9 @@
     <list default="true" id="0d216430-9403-4813-a7b4-4ee3cacecde2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/api.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/api.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/api_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/api_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,8 +24,11 @@
       <file leaf-file-name="api_test.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/api_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6622">
-              <caret line="311" column="9" selection-start-line="311" selection-start-column="9" selection-end-line="311" selection-end-column="9" />
+            <state relative-caret-position="582">
+              <caret line="39" column="6" lean-forward="true" selection-start-line="39" selection-start-column="6" selection-end-line="39" selection-end-column="6" />
+              <folding>
+                <element signature="e#13#159#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -48,8 +54,35 @@
       <file leaf-file-name="api.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/api.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="19" column="43" selection-start-line="19" selection-start-column="43" selection-end-line="19" selection-end-column="43" />
+            <state relative-caret-position="220">
+              <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+              <folding>
+                <element signature="e#13#99#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="model.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/api/model.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="78">
+              <caret line="17" column="1" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+              <folding>
+                <element signature="e#13#53#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+              <folding>
+                <element signature="e#14#84#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -83,14 +116,15 @@
       <find>ProduceDB</find>
       <find>init</find>
       <find>CurrentDB</find>
+      <find>DB</find>
     </findStrings>
     <replaceStrings>
       <replace>Data</replace>
       <replace>produce_code</replace>
       <replace>unit_price</replace>
       <replace>pItem</replace>
-      <replace>CurrentDB</replace>
       <replace>ProduceDB</replace>
+      <replace>CurrentDB</replace>
     </replaceStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
@@ -107,13 +141,13 @@
         <option value="$PROJECT_DIR$/templates/produce.gohtml" />
         <option value="$PROJECT_DIR$/deployment.yml" />
         <option value="$PROJECT_DIR$/Dockerfile" />
-        <option value="$PROJECT_DIR$/api/model.go" />
-        <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/api/handlers.go" />
-        <option value="$PROJECT_DIR$/api/api_test.go" />
         <option value="$PROJECT_DIR$/deploy-staging.sh" />
         <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$PROJECT_DIR$/deploy-production.sh" />
+        <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/api/model.go" />
+        <option value="$PROJECT_DIR$/api/api_test.go" />
         <option value="$PROJECT_DIR$/api/api.go" />
       </list>
     </option>
@@ -129,7 +163,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="838" />
+    <option name="width" value="1096" />
     <option name="height" value="1027" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -259,51 +293,51 @@
     </recent_temporary>
   </component>
   <component name="TestHistory">
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 28m 57s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 33m 02s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 30m 01s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 33m 17s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 30m 44s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 33m 37s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 31m 01s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 33m 53s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 32m 00s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 36m 26s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 33m 59s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 43m 44s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 35m 12s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 44m 04s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 35m 29s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 44m 56s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 35m 46s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 45m 17s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 20h 37m 19s.xml">
+    <history-entry file="go_test_gannett - 2018.05.08 at 13h 45m 24s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="838" height="1027" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="23" width="1096" height="1027" extended-state="0" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" visible="true" weight="0.13746065" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.13746065" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.42287514" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.3298585" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27684963" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21167883" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.32843652" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39985108" />
@@ -313,7 +347,6 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32911393" />
       <window_info anchor="right" id="Coverage" order="3" side_tool="true" weight="0.21174169" />
     </layout>
   </component>
@@ -324,7 +357,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="changing program structure to better suit testing" />
     <MESSAGE value="added unit tests" />
     <MESSAGE value="push before adding mutex" />
     <MESSAGE value="added mutex to read/write/delete points" />
@@ -349,17 +381,11 @@
     <MESSAGE value="updated unit tests" />
     <MESSAGE value="refactored tests to be table based" />
     <MESSAGE value="kubernetes test" />
-    <option name="LAST_COMMIT_MESSAGE" value="kubernetes test" />
+    <MESSAGE value="kubernetes deployment working :D" />
+    <option name="LAST_COMMIT_MESSAGE" value="kubernetes deployment working :D" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/api/api.go</url>
-          <line>116</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="18" />
     </breakpoint-manager>
   </component>
@@ -368,6 +394,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6842">
           <caret line="311" column="9" lean-forward="true" selection-start-line="311" selection-start-column="9" selection-end-line="311" selection-end-column="9" />
+          <folding>
+            <element signature="e#13#159#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -389,6 +418,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+          <folding>
+            <element signature="e#14#84#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -410,6 +442,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5280">
           <caret line="247" column="1" lean-forward="true" selection-start-line="247" selection-start-column="1" selection-end-line="247" selection-end-column="1" />
+          <folding>
+            <element signature="e#13#99#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -417,6 +452,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="15" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="e#14#84#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -509,23 +547,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/deployment.yml" />
-    <entry file="file://$PROJECT_DIR$/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/model.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1700">
-          <caret line="92" column="26" selection-start-line="92" selection-start-column="26" selection-end-line="92" selection-end-column="26" />
-          <folding>
-            <element signature="e#13#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/api/handlers.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -544,13 +565,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="305">
           <caret line="492" column="17" selection-start-line="492" selection-start-column="17" selection-end-line="492" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/api_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6622">
-          <caret line="311" column="9" selection-start-line="311" selection-start-column="9" selection-end-line="311" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -576,10 +590,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <folding>
+            <element signature="e#14#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/model.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="17" column="1" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+          <folding>
+            <element signature="e#13#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/api_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="582">
+          <caret line="39" column="6" lean-forward="true" selection-start-line="39" selection-start-column="6" selection-end-line="39" selection-end-column="6" />
+          <folding>
+            <element signature="e#13#159#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/api/api.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="19" column="43" selection-start-line="19" selection-start-column="43" selection-end-line="19" selection-end-column="43" />
+        <state relative-caret-position="220">
+          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+          <folding>
+            <element signature="e#13#99#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
