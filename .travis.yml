@@ -2,7 +2,7 @@ sudo: required
 
 cache:
   directories:
-    - "$HOME"/google-cloud-sdk/"
+    -"$HOME"/google-cloud-sdk/"
 
 services:
   - docker
@@ -22,6 +22,7 @@ env:
     - CLOUDSDK_COMPUTE_ZONE = us-east1-b
     - DOCKER_IMAGE_NAME = jstorer/gannett
     - KUBE_DEPLOYMENT_NAME = jstorer/gannett
+    - KUBE_DEPLOYMENT_CONTAINER_NAME = jstorer/gannett
     - NODE_ENV = CI
 
 before_install:
