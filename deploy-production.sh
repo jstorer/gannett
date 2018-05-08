@@ -10,7 +10,7 @@ gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
 gcloud --quiet config set project supermarket
 gcloud --quiet config set container/cluster supermarket-05052018
 gcloud --quiet config set compute/zone us-east1-b
-gcloud --quiet container clusters get-credentials supermarket-05052018
+gcloud --quiet container clusters get-credentials supermarket-cluster
 
 gcloud docker push gcr.io/supermarket-05052018/jstorer/gannett
 
@@ -19,7 +19,7 @@ yes | gcloud beta container images add-tag gcr.io/supermarket-05052018/jstorer/g
 kubectl config view
 kubectl config current-context
 
-kubectl set image deployment/jstorer/gannett jstorer/gannett=gcr.io/supermarket-05052018/$jstorer/gannett:$TRAVIS_COMMIT
+kubectl set image deployment/jstorer/gannett jstorer/gannett=gcr.io/supermarket-05052018/jstorer/gannett:$TRAVIS_COMMIT
 
 #
 # sleep 30
