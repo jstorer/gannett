@@ -12,18 +12,18 @@ language: go
 go:
   - master
 
-env:
-  global:
-    - GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
-    - PROJECT_NAME_STG = supermarket
-    - CLUSTER_NAME_STG = supermarket-05052018
-    - PROJECT_NAME_PRD = supermarket
-    - CLUSTER_NAME_PRD = supermarket-05052018
-    - CLOUDSDK_COMPUTE_ZONE = us-east1-b
-    - DOCKER_IMAGE_NAME = jstorer/gannett
-    - KUBE_DEPLOYMENT_NAME = jstorer/gannett
-    - KUBE_DEPLOYMENT_CONTAINER_NAME = jstorer/gannett
-    - NODE_ENV = CI
+#env:
+#  global:
+#    - GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
+#    - PROJECT_NAME_STG = supermarket
+#    - CLUSTER_NAME_STG = supermarket-05052018
+#    - PROJECT_NAME_PRD = supermarket
+#    - CLUSTER_NAME_PRD = supermarket-05052018
+#    - CLOUDSDK_COMPUTE_ZONE = us-east1-b
+#    - DOCKER_IMAGE_NAME = jstorer/gannett
+#    - KUBE_DEPLOYMENT_NAME = jstorer/gannett
+#    - KUBE_DEPLOYMENT_CONTAINER_NAME = jstorer/gannett
+#    - NODE_ENV = CI
 
 before_install:
   - sudo apt-get update
