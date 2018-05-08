@@ -26,9 +26,22 @@ help ensure correctness.
 
 ## Install
 The latest version of the API is pushed to dockerhub as well as hosted in a kubernetes cluster.
-To use the docker version run the command
+To use the docker version run the commands
 
-```some command```
+first get the latest version of the docker image
+
+```docker pull jstorer/gannett```
+
+next run the image
+
+```docker run -p 8080:8080 jstorer/gannett```
+
+you will see "*...Supermarket Server Starting...*" if everything worked as intended.
+
+## End Points
+
+
+
 
 
 
