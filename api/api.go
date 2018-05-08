@@ -54,28 +54,27 @@ func jsonResponse(w http.ResponseWriter, statusCode int, payload interface{}) {
 	w.Write(response)
 }
 
-func getAllProduce(w http.ResponseWriter, _ *http.Request) {
+func handleGetAllProduce(w http.ResponseWriter, _ *http.Request) {
 	chnl := make(chan []ProduceItem)
-	go readAllProduceItems(chnl)
+	go getAllProduceItems(chnl)
 	allItems := <-chnl
 	jsonResponse(w, http.StatusOK, allItems)
 }
 
-func getProduceItem(w http.ResponseWriter, r *http.Request) {
+func handleGetProduceItem(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	//check if produce code format is valid
-	params["produce_code"] = strings.ToUpper(params["produce_code"])
 	if !IsValidProduceCode(params["produce_code"]) {
 		http.Error(w, "error 400 - invalid produce code format", 400)
 		return
 	}
 
-	chnl := make(chan ProduceItem)
+	pItemChnl := make(chan ProduceItem)
 
-	go readProduceItem(params["produce_code"], chnl)
+	go getProduceItem(params["produce_code"], pItemChnl)
 
-	pItem := <-chnl
+	pItem := <-pItemChnl
 
 	if pItem.ProduceCode != "" {
 		jsonResponse(w, http.StatusOK, pItem)
@@ -86,7 +85,7 @@ func getProduceItem(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func createProduceItem(w http.ResponseWriter, r *http.Request) {
+func handleCreateProduceItem(w http.ResponseWriter, r *http.Request) {
 	var pItem ProduceItem
 
 	if err := json.NewDecoder(r.Body).Decode(&pItem); err != nil {
@@ -101,7 +100,7 @@ func createProduceItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pItemChnl := make(chan ProduceItem)
-	go writeNewProduceItem(pItem, pItemChnl)
+	go createProduceItem(pItem, pItemChnl)
 	pItem = <-pItemChnl
 
 	if pItem.ProduceCode == "" {
@@ -113,7 +112,7 @@ func createProduceItem(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func updateProduceItem(w http.ResponseWriter, r *http.Request) {
+func handleUpdateProduceItem(w http.ResponseWriter, r *http.Request) {
 	var pItem ProduceItem
 	params := mux.Vars(r)
 
@@ -136,7 +135,7 @@ func updateProduceItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pItemChnl := make(chan ProduceItem)
-	go writeUpdateProduceItem(params["produce_code"], pItem, pItemChnl)
+	go updateProduceItem(params["produce_code"], pItem, pItemChnl)
 	pItem = <-pItemChnl
 
 	if pItem.ProduceCode == "" {
@@ -153,20 +152,18 @@ func updateProduceItem(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func deleteProduceItem(w http.ResponseWriter, r *http.Request) {
+func handleDeleteProduceItem(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	//check if produce code format is valid
-	params["produce_code"] = strings.ToUpper(params["produce_code"])
 	if !IsValidProduceCode(params["produce_code"]) {
 		http.Error(w, "error 400 - invalid produce code format", 400)
 		return
 	}
 
 	var pItem ProduceItem
-	pItem.ProduceCode = params["produce_code"]
 	pItemChnl := make(chan ProduceItem)
-	go removeProduceItem(pItem, pItemChnl)
+	go deleteProduceItem(params["produce_code"], pItemChnl)
 	pItem = <-pItemChnl
 
 	if pItem.ProduceCode == "" {

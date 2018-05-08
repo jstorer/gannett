@@ -294,7 +294,7 @@ func TestDeleteProduceItem(t *testing.T) {
 		expectedBody string
 	}{
 		{"delete item", "DELETE", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl),
-			200, `{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"","unit_price":""}`},
+			200, `{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"Lettuce","unit_price":"$3.46"}`},
 		//
 		{"invalid produce code", "DELETE", fmt.Sprintf("%s/ABCDe-1234-EFGH-5678", produceUrl),
 			400, "error 400 - invalid produce code format\n"},

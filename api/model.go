@@ -17,25 +17,25 @@ type DBObject struct {
 	Data []ProduceItem
 }
 
-func readAllProduceItems(sendchannel chan<- []ProduceItem) {
+func getAllProduceItems(allItemsChnl chan []ProduceItem) {
 	currentDB.mu.RLock()
 	defer currentDB.mu.RUnlock()
-	sendchannel <- currentDB.Data
+	allItemsChnl <- currentDB.Data
 }
 
-func readProduceItem(pCode string, sendchannel chan<- ProduceItem) {
+func getProduceItem(pCode string, pItemChnl chan ProduceItem) {
 	currentDB.mu.RLock()
 	defer currentDB.mu.RUnlock()
 	for _, item := range currentDB.Data {
 		if item.ProduceCode == pCode {
-			sendchannel <- item
+			pItemChnl <- item
 			return
 		}
 	}
-	sendchannel <- ProduceItem{}
+	pItemChnl <- ProduceItem{}
 }
 
-func writeNewProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
+func createProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
 	currentDB.mu.Lock()
 	defer currentDB.mu.Unlock()
 
@@ -50,7 +50,7 @@ func writeNewProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
 	pItemChnl <- pItem
 }
 
-func writeUpdateProduceItem(pCode string, pItem ProduceItem, pItemChnl chan ProduceItem) {
+func updateProduceItem(pCode string, pItem ProduceItem, pItemChnl chan ProduceItem) {
 	currentDB.mu.Lock()
 	defer currentDB.mu.Unlock()
 
@@ -76,13 +76,17 @@ func writeUpdateProduceItem(pCode string, pItem ProduceItem, pItemChnl chan Prod
 	pItemChnl <- ProduceItem{}
 }
 
-func removeProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
+func deleteProduceItem(pCode string, pItemChnl chan ProduceItem) {
 	currentDB.mu.Lock()
 	defer currentDB.mu.Unlock()
+	var pItem ProduceItem
 
 	for index, item := range currentDB.Data {
-		if item.ProduceCode == pItem.ProduceCode {
+		if item.ProduceCode == pCode {
 			currentDB.Data = append(currentDB.Data[:index], currentDB.Data[index+1:]...)
+			pItem.ProduceCode = item.ProduceCode
+			pItem.Name = item.Name
+			pItem.UnitPrice = item.UnitPrice
 			pItemChnl <- pItem
 			return
 		}
