@@ -213,7 +213,7 @@ func TestUpdateProduceItem(t *testing.T) {
 		{"updated code already exists", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-QR88", produceUrl),
 			409, "2222-2222-2222-2222", "Cheese", "$5.00", "error 409 - updated produce code value already exists\n"},
 		//
-		{"produce code doesn't exist to update", "PUT", fmt.Sprintf("%s/E5T6-9UI3-TH15-1111", produceUrl),
+		{"produce code doesn't exist to update", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-1111", produceUrl),
 			404, "A12T-4GH7-QPL9-3N4A", "Cheese", "$5.00", "error 404 - produce code does not exist\n"},
 		//
 		{"invalid end point", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-111", produceUrl),
