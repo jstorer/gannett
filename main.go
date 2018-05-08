@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/jstorer/gannett/api"
 	"log"
 	"net/http"
+	"github.com/jstorer/gannett/api"
 )
+
 
 func main() {
 	fmt.Println("...Supermarket Server Starting...")

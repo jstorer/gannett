@@ -3,9 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="0d216430-9403-4813-a7b4-4ee3cacecde2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/api.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/api.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/api_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/api_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/handlers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,80 +20,106 @@
     <SUITE FILE_PATH="coverage/gannett$TestGetAllProduce_in_github_com_jstorer_gannett_api.out" NAME="TestGetAllProduce in github.com/jstorer/gannett/api Coverage Results" MODIFIED="1525224032958" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="GoCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="api.go" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/api/api.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="e#13#118#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-              <folding>
-                <element signature="e#14#84#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".travis.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.travis.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" column="10" lean-forward="true" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="model.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/model.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="616">
-              <caret line="28" column="34" selection-start-line="28" selection-start-column="25" selection-end-line="28" selection-end-column="34" />
-              <folding>
-                <element signature="e#13#53#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="api_test.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/api_test.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="18" column="1" lean-forward="true" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="client.go" pinned="false" current-in-tab="false">
-        <entry file="file:///usr/local/go/src/net/http/client.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="492" column="17" selection-start-line="492" selection-start-column="17" selection-end-line="492" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="request.go" pinned="false" current-in-tab="false">
-        <entry file="file:///usr/local/go/src/net/http/request.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="535">
-              <caret line="768" column="5" selection-start-line="768" selection-start-column="5" selection-end-line="768" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.1">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="api.go" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/api/api.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1639">
+                  <caret line="86" column="67" lean-forward="true" selection-start-line="86" selection-start-column="8" selection-end-line="86" selection-end-column="67" />
+                  <folding>
+                    <element signature="e#13#118#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/main.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="198">
+                  <caret line="9" selection-start-line="9" selection-end-line="9" />
+                  <folding>
+                    <element signature="e#14#84#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name=".travis.yml" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/.travis.yml">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="88">
+                  <caret line="4" column="10" lean-forward="true" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="model.go" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/api/model.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1700">
+                  <caret line="92" column="26" selection-start-line="92" selection-start-column="26" selection-end-line="92" selection-end-column="26" />
+                  <folding>
+                    <element signature="e#13#53#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="handlers.go" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/api/handlers.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="176">
+                  <caret line="8" column="85" selection-start-line="8" selection-start-column="85" selection-end-line="8" selection-end-column="85" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="api_test.go" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/api/api_test.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state>
+                  <caret column="11" selection-start-column="11" selection-end-column="11" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="client.go" pinned="false" current-in-tab="false">
+            <entry file="file:///usr/local/go/src/net/http/client.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="305">
+                  <caret line="492" column="17" selection-start-line="492" selection-start-column="17" selection-end-line="492" selection-end-column="17" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="request.go" pinned="false" current-in-tab="false">
+            <entry file="file:///usr/local/go/src/net/http/request.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="535">
+                  <caret line="768" column="5" selection-start-line="768" selection-start-column="5" selection-end-line="768" selection-end-column="5" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="api_test.go" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/api/api_test.go">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="948">
+                  <caret line="320" column="4" selection-start-line="320" selection-start-column="4" selection-end-line="320" selection-end-column="4" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -108,14 +135,18 @@
       <find>unitprice</find>
       <find>produceItem</find>
       <find>api.</find>
-      <find>ProduceDB</find>
       <find>produceDB</find>
+      <find>ProduceDB</find>
+      <find>init</find>
+      <find>CurrentDB</find>
     </findStrings>
     <replaceStrings>
       <replace>Data</replace>
       <replace>produce_code</replace>
       <replace>unit_price</replace>
       <replace>pItem</replace>
+      <replace>CurrentDB</replace>
+      <replace>ProduceDB</replace>
     </replaceStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
@@ -132,12 +163,12 @@
         <option value="$PROJECT_DIR$/templates/produce.gohtml" />
         <option value="$PROJECT_DIR$/deployment.yml" />
         <option value="$PROJECT_DIR$/Dockerfile" />
-        <option value="$PROJECT_DIR$/api/handlers.go" />
-        <option value="$PROJECT_DIR$/main.go" />
-        <option value="$PROJECT_DIR$/api/model.go" />
         <option value="$PROJECT_DIR$/.travis.yml" />
-        <option value="$PROJECT_DIR$/api/api_test.go" />
+        <option value="$PROJECT_DIR$/api/model.go" />
+        <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/api/api.go" />
+        <option value="$PROJECT_DIR$/api/handlers.go" />
+        <option value="$PROJECT_DIR$/api/api_test.go" />
       </list>
     </option>
   </component>
@@ -282,34 +313,34 @@
     </recent_temporary>
   </component>
   <component name="TestHistory">
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 19m 47s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 28m 57s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 20m 20s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 30m 01s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 20m 32s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 30m 44s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 21m 01s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 31m 01s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 21m 10s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 32m 00s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 22m 07s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 33m 59s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 25m 14s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 35m 12s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 31m 51s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 35m 29s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 32m 55s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 35m 46s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_gannett - 2018.05.07 at 17h 38m 59s.xml">
+    <history-entry file="go_test_gannett - 2018.05.07 at 20h 37m 19s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
   </component>
@@ -370,11 +401,20 @@
     <MESSAGE value="reorganize code" />
     <MESSAGE value="added update functionality and unit tests" />
     <MESSAGE value="update travis file" />
-    <option name="LAST_COMMIT_MESSAGE" value="update travis file" />
+    <MESSAGE value="updated unit tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated unit tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="17" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/api/api.go</url>
+          <line>115</line>
+          <properties />
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="18" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -520,22 +560,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/handlers.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="20" lean-forward="true" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/supermarket-0697b9fc012c.json">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.travis.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="10" lean-forward="true" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
-        </state>
-      </provider>
     </entry>
     <entry file="file:///usr/local/go/src/net/http/client.go">
       <provider selected="true" editor-type-id="text-editor">
@@ -551,40 +577,54 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/model.go">
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="28" column="34" selection-start-line="28" selection-start-column="25" selection-end-line="28" selection-end-column="34" />
-          <folding>
-            <element signature="e#13#53#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="88">
+          <caret line="4" column="10" lean-forward="true" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+        <state relative-caret-position="198">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
           <folding>
             <element signature="e#14#84#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/api_test.go">
+    <entry file="file://$PROJECT_DIR$/api/handlers.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="18" column="1" lean-forward="true" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+        <state relative-caret-position="176">
+          <caret line="8" column="85" selection-start-line="8" selection-start-column="85" selection-end-line="8" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/model.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1700">
+          <caret line="92" column="26" selection-start-line="92" selection-start-column="26" selection-end-line="92" selection-end-column="26" />
+          <folding>
+            <element signature="e#13#53#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/api/api.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="1639">
+          <caret line="86" column="67" lean-forward="true" selection-start-line="86" selection-start-column="8" selection-end-line="86" selection-end-column="67" />
           <folding>
             <element signature="e#13#118#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/api_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="948">
+          <caret line="320" column="4" selection-start-line="320" selection-start-column="4" selection-end-line="320" selection-end-column="4" />
         </state>
       </provider>
     </entry>
