@@ -21,5 +21,6 @@ kubectl config current-context
 
 kubectl set image deployment/${KUBE_DEPLOYMENT_NAME} ${KUBE_DEPLOYMENT_CONTAINER_NAME}=gcr.io/${PROJECT_NAME_STG}/${DOCKER_IMAGE_NAME}:$TRAVIS_COMMIT
 
+#
 # sleep 30
 # npm run e2e_test
