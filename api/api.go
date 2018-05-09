@@ -32,17 +32,17 @@ func Initialize(isTesting bool) {
 	}
 }
 
-func IsValidProduceCode(produceCode string) bool {
+func isValidProduceCode(produceCode string) bool {
 	match, _ := regexp.MatchString(`^[\d\w]{4}-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}$`, produceCode)
 	return match
 }
 
-func IsValidUnitPrice(unitPrice string) bool {
+func isValidUnitPrice(unitPrice string) bool {
 	match, _ := regexp.MatchString(`^\$(([1-9]\d{0,2}(,\d{3})*)|(([1-9]\d*)?\d))(\.\d\d?)?$`, unitPrice)
 	return match
 }
 
-func IsValidName(name string) bool {
+func isValidName(name string) bool {
 	match, _ := regexp.MatchString(`^\w+(?: \w+)*$`, name)
 	return match
 }
@@ -65,7 +65,7 @@ func handleGetProduceItem(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	//check if produce code format is valid
-	if !IsValidProduceCode(params["produce_code"]) {
+	if !isValidProduceCode(params["produce_code"]) {
 		http.Error(w, "error 400 - invalid produce code format", 400)
 		return
 	}
@@ -88,7 +88,8 @@ func handleGetProduceItem(w http.ResponseWriter, r *http.Request) {
 func handleCreateProduceItem(w http.ResponseWriter, r *http.Request) {
 	var pItem ProduceItem
 
-	if err := json.NewDecoder(r.Body).Decode(&pItem); err != nil {
+	err := json.NewDecoder(r.Body).Decode(&pItem)
+	if err != nil {
 		panic(err)
 	}
 
@@ -118,12 +119,13 @@ func handleUpdateProduceItem(w http.ResponseWriter, r *http.Request) {
 
 	//check if produce code format is valid
 	params["produce_code"] = strings.ToUpper(params["produce_code"])
-	if !IsValidProduceCode(params["produce_code"]) {
+	if !isValidProduceCode(params["produce_code"]) {
 		http.Error(w, "error 400 - invalid produce code format", 400)
 		return
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&pItem); err != nil {
+	err := json.NewDecoder(r.Body).Decode(&pItem)
+	if err != nil {
 		panic(err)
 	}
 
@@ -156,7 +158,7 @@ func handleDeleteProduceItem(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	//check if produce code format is valid
-	if !IsValidProduceCode(params["produce_code"]) {
+	if !isValidProduceCode(params["produce_code"]) {
 		http.Error(w, "error 400 - invalid produce code format", 400)
 		return
 	}

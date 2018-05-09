@@ -61,7 +61,7 @@ func updateProduceItem(pCode string, pItem ProduceItem, pItemChnl chan ProduceIt
 		if item.ProduceCode == pCode {
 			for _, item := range currentDB.Data {
 				if item.ProduceCode == pItem.ProduceCode && pCode != pItem.ProduceCode {
-					pItemChnl <- ProduceItem{ProduceCode: "0"}
+					pItemChnl <- ProduceItem{ProduceCode: "0", Name: "", UnitPrice: ""}
 					return
 				}
 			}
@@ -110,15 +110,15 @@ func (pItem *ProduceItem) validateProduceItem() url.Values {
 	}
 	//are all values valid formats
 	pItem.ProduceCode = strings.ToUpper(pItem.ProduceCode)
-	if !IsValidProduceCode(pItem.ProduceCode) {
+	if !isValidProduceCode(pItem.ProduceCode) {
 		errs.Add("produce_code", "invalid produce code format")
 	}
 
-	if !IsValidName(pItem.Name) {
+	if !isValidName(pItem.Name) {
 		errs.Add("name", "invalid name format")
 	}
 
-	if !IsValidUnitPrice(pItem.UnitPrice) {
+	if !isValidUnitPrice(pItem.UnitPrice) {
 		errs.Add("unit_price", "invalid unit price format")
 	}
 	return errs

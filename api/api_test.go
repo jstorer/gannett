@@ -70,7 +70,7 @@ func TestIsValidProduceCode(t *testing.T) {
 	}
 
 	for _, item := range testCodes {
-		assert.Equal(t, item.valid, IsValidProduceCode(item.value), fmt.Sprintf("On Produce Code: `%s`", item.value))
+		assert.Equal(t, item.valid, isValidProduceCode(item.value), fmt.Sprintf("On Produce Code: `%s`", item.value))
 	}
 }
 
@@ -104,9 +104,93 @@ func TestIsValidUnitPrice(t *testing.T) {
 	}
 
 	for _, item := range testPrices {
-		assert.Equal(t, item.valid, IsValidUnitPrice(item.value), fmt.Sprintf("On Unit Price: `%s`", item.value))
+		assert.Equal(t, item.valid, isValidUnitPrice(item.value), fmt.Sprintf("On Unit Price: `%s`", item.value))
 	}
 
+}
+
+func TestGetAllProduceItems(t *testing.T) {
+	reinitTest()
+	chnl := make(chan []ProduceItem)
+	go getAllProduceItems(chnl)
+	allItems := <-chnl
+	assert.Equal(t, currentDB.Data, allItems, "DB not returning correct values")
+}
+
+func TestGetProduceItem(t *testing.T) {
+	var getProduceItemTests = []struct {
+		desc           string
+		produceCode    string
+		expectedOutput string
+	}{
+		{"produce code valid", "2222-2222-2222-2222", "2222-2222-2222-2222"},
+		{"produce code invalid", "aji-ewfi-23ijf", ""},
+		{"produce code does not exist", "1111-1111-1111-1111", ""},
+	}
+	for _, item := range getProduceItemTests {
+		reinitTest()
+		pItemChnl := make(chan ProduceItem)
+		go getProduceItem(item.produceCode, pItemChnl)
+		pItem := <-pItemChnl
+		assert.Equal(t, item.expectedOutput, pItem.ProduceCode, fmt.Sprintf("unexpected output for %s", item.desc))
+	}
+}
+
+func TestCreateProduceItem(t *testing.T) {
+	var createProduceItemTests = []struct {
+		desc           string
+		pItem          ProduceItem
+		expectedOutput ProduceItem
+	}{
+		{"valid produce item", ProduceItem{"1111-1111-1111-1111", "Bacon", "$1.23"}, ProduceItem{"1111-1111-1111-1111", "Bacon", "$1.23"}},
+		{"produce code already exists", ProduceItem{"2222-2222-2222-2222", "Bacon", "$1.23"}, ProduceItem{"", "", ""}},
+	}
+	for _, item := range createProduceItemTests {
+		reinitTest()
+		pItemChanl := make(chan ProduceItem)
+		go createProduceItem(item.pItem, pItemChanl)
+		pItem := <-pItemChanl
+		assert.Equal(t, item.expectedOutput, pItem, fmt.Sprintf("unexpeted output for %s", item.desc))
+	}
+}
+
+func TestUpdateProduceItem(t *testing.T) {
+	var updateProduceItemTests = []struct {
+		desc           string
+		produceCode    string
+		pItem          ProduceItem
+		expectedOutput ProduceItem
+	}{
+		{"valid produce code", "2222-2222-2222-2222", ProduceItem{"1111-1111-1111-1111", "Bacon", "$1.23"}, ProduceItem{"1111-1111-1111-1111", "Bacon", "$1.23"}},
+		{"updated code exists", "2222-2222-2222-2222", ProduceItem{"A12T-4GH7-QPL9-3N4M", "Bacon", "$1.23"}, ProduceItem{"0", "", ""}},
+		{"produce code not found", "ABCD-2222-2222-2222", ProduceItem{"A12T-4GH7-QPL9-3N4M", "Bacon", "$1.23"}, ProduceItem{"", "", ""}},
+	}
+
+	for _, item := range updateProduceItemTests {
+		reinitTest()
+		pItemChnl := make(chan ProduceItem)
+		go updateProduceItem(item.produceCode, item.pItem, pItemChnl)
+		pItem := <-pItemChnl
+		assert.Equal(t, item.expectedOutput, pItem, fmt.Sprintf("unexpeted output for %s", item.desc))
+	}
+}
+
+func TestDeleteProduceItem(t *testing.T) {
+	var deleteProduceItemTests = []struct {
+		desc           string
+		produceCode    string
+		expectedOutput ProduceItem
+	}{
+		{"valid produce code", "2222-2222-2222-2222", ProduceItem{"2222-2222-2222-2222", "Gala Apple", "$3.59"}},
+		{"code does not exist", "ABCD-2222-2222-2222", ProduceItem{"", "", ""}},
+	}
+	for _, item := range deleteProduceItemTests {
+		reinitTest()
+		pItemChnl := make(chan ProduceItem)
+		go deleteProduceItem(item.produceCode, pItemChnl)
+		pItem := <-pItemChnl
+		assert.Equal(t, item.expectedOutput, pItem, fmt.Sprintf("unexpeted output for %s", item.desc))
+	}
 }
 
 func TestIsValidName(t *testing.T) {
@@ -126,12 +210,11 @@ func TestIsValidName(t *testing.T) {
 		{"m!lk", false},
 	}
 	for _, item := range testNames {
-		assert.Equal(t, item.valid, IsValidName(item.value), fmt.Sprintf("On Unit Price: `%s`", item.value))
+		assert.Equal(t, item.valid, isValidName(item.value), fmt.Sprintf("On Unit Price: `%s`", item.value))
 	}
 }
 
-func TestGetAllProduce(t *testing.T) {
-	reinitTest()
+func TestHandleGetAllProduce(t *testing.T) {
 	var getAllTests = []struct {
 		desc         string
 		method       string
@@ -144,6 +227,7 @@ func TestGetAllProduce(t *testing.T) {
 	}
 
 	for _, item := range getAllTests {
+		reinitTest()
 		request, err := http.NewRequest(item.method, item.path, nil)
 		response, err := http.DefaultClient.Do(request)
 
@@ -153,13 +237,12 @@ func TestGetAllProduce(t *testing.T) {
 
 		responseData, _ := ioutil.ReadAll(response.Body)
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
-		assert.Equal(t, item.statusCode, response.StatusCode, "unexpected status code")
+		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
 
 }
 
-func TestGetProduceItem(t *testing.T) {
-	reinitTest()
+func TestHandleGetProduceItem(t *testing.T) {
 	var getItemTests = []struct {
 		desc         string
 		method       string
@@ -178,6 +261,7 @@ func TestGetProduceItem(t *testing.T) {
 	}
 
 	for _, item := range getItemTests {
+		reinitTest()
 		request, err := http.NewRequest(item.method, item.path, nil)
 		response, err := http.DefaultClient.Do(request)
 
@@ -187,13 +271,12 @@ func TestGetProduceItem(t *testing.T) {
 
 		responseData, _ := ioutil.ReadAll(response.Body)
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
-		assert.Equal(t, item.statusCode, response.StatusCode, "unexpected status code")
+		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
 
 }
 
-func TestUpdateProduceItem(t *testing.T) {
-	reinitTest()
+func TestHandleUpdateProduceItem(t *testing.T) {
 	var updateItemTests = []struct {
 		desc         string
 		method       string
@@ -225,6 +308,7 @@ func TestUpdateProduceItem(t *testing.T) {
 	}
 
 	for _, item := range updateItemTests {
+		reinitTest()
 		produceItemJson := `{"produce_code":"` + item.produceCode + `","name":"` + item.name + `","unit_price":"` + item.unitPrice + `"}`
 		reader = strings.NewReader(produceItemJson)
 		request, err := http.NewRequest(item.method, item.path, reader)
@@ -236,12 +320,11 @@ func TestUpdateProduceItem(t *testing.T) {
 
 		responseData, _ := ioutil.ReadAll(response.Body)
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
-		assert.Equal(t, item.statusCode, response.StatusCode, "unexpected status code")
+		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
 }
 
-func TestCreateProduceItem(t *testing.T) {
-	reinitTest()
+func TestHandleCreateProduceItem(t *testing.T) {
 	var createItemTests = []struct {
 		desc         string
 		method       string
@@ -255,7 +338,7 @@ func TestCreateProduceItem(t *testing.T) {
 		{"create item", "POST", produceUrl, 201, "1234-5678-90ab-cdef",
 			"Cheese", "$9.99", `{"produce_code":"1234-5678-90AB-CDEF","name":"Cheese","unit_price":"$9.99"}`},
 		//
-		{"try to create duplicate code", "POST", produceUrl, 409, "1234-5678-90ab-cdef",
+		{"try to create duplicate code", "POST", produceUrl, 409, "2222-2222-2222-2222",
 			"Cheese", "$9.99", "error 409 - produce code already exists\n"},
 		//
 		{"left produce code field empty", "POST", produceUrl, 400, "",
@@ -269,6 +352,7 @@ func TestCreateProduceItem(t *testing.T) {
 	}
 
 	for _, item := range createItemTests {
+		reinitTest()
 		produceItemJson := `{"produce_code":"` + item.produceCode + `","name":"` + item.name + `","unit_price":"` + item.unitPrice + `"}`
 		reader = strings.NewReader(produceItemJson)
 		request, err := http.NewRequest(item.method, item.path, reader)
@@ -280,12 +364,11 @@ func TestCreateProduceItem(t *testing.T) {
 
 		responseData, _ := ioutil.ReadAll(response.Body)
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
-		assert.Equal(t, item.statusCode, response.StatusCode, "unexpected status code")
+		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
 }
 
-func TestDeleteProduceItem(t *testing.T) {
-	reinitTest()
+func TestHandleDeleteProduceItem(t *testing.T) {
 	var deleteItemTests = []struct {
 		desc         string
 		method       string
@@ -299,11 +382,12 @@ func TestDeleteProduceItem(t *testing.T) {
 		{"invalid produce code", "DELETE", fmt.Sprintf("%s/ABCDe-1234-EFGH-5678", produceUrl),
 			400, "error 400 - invalid produce code format\n"},
 		//
-		{"code does not exist", "DELETE", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl),
+		{"code does not exist", "DELETE", fmt.Sprintf("%s/A12T-4GH7-QPL9-ABCD", produceUrl),
 			404, "error 404 - produce code not found.\n"},
 	}
 
 	for _, item := range deleteItemTests {
+		reinitTest()
 		request, err := http.NewRequest(item.method, item.path, nil)
 		response, err := http.DefaultClient.Do(request)
 
@@ -313,11 +397,11 @@ func TestDeleteProduceItem(t *testing.T) {
 
 		responseData, _ := ioutil.ReadAll(response.Body)
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
-		assert.Equal(t, item.statusCode, response.StatusCode, "unexpected status code")
+		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
 }
 
-func TestValidateProduceItem(t *testing.T) {
+func TestHandleValidateProduceItem(t *testing.T) {
 	var validateProduceItemTests = []struct {
 		desc           string
 		produceCode    string
@@ -342,7 +426,7 @@ func TestValidateProduceItem(t *testing.T) {
 		validErrs := pItem.validateProduceItem()
 		err := map[string]interface{}{"validationError": validErrs}
 		response, _ := json.Marshal(err)
-		assert.Equal(t, item.expectedOutput, string(response), "unexpected output")
+		assert.Equal(t, item.expectedOutput, string(response), fmt.Sprintf("unexpected output for %s", item.desc))
 	}
 
 }
