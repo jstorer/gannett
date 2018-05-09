@@ -38,9 +38,9 @@ next run the image
 ```docker run -p 8080:8080 jstorer/gannett```
 
 you will see "*...Supermarket Server Starting...*"
-if everything worked as intended and port 8080 of the container
+if everything worked as intended then port 8080 of the container
 should be bound to port 8080 of the local machine.
-This will result in the following end points
+This will result in the following end points using `http://localhost:8080{end point}`
 
 ## End Points
 
