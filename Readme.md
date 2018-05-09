@@ -115,17 +115,21 @@ type DBObject struct {
 }
 ```
 Upon starting, the application will select either a production or test database via a flag in `api.Initializer(isTesting bool)`, so testing and running can have their own data sources. Then the routes will be set as, seen in *handlers.go*, and the application will begin listening on port 8080. Depending on the request one of the handler functions will fire:
+
 ##### Handler Functions
 These are the functions set by the router to handle incoming requests.
+
 ###### handleGetAllProduce(ResponseWrite, *Request)
 This function sends a request to the database to fetch all produce items through a goroutine,`getAllProduceItems(chan []ProduceItem)`,
 then returns them on a channel then finally returns them in JSON format with a 200 status code.
+
 ###### handleGetProduceItem(ResponseWrite, *Request)
 This function first retrieves the produce code from the URL and
 determines if it is valid. If it is not valid it triggers a status 400 error.
 If it is valid it fires a goroutine,`getProduceItem(chan ProduceItem)`, to fetch that particular item and waits
 for a response via a channel. If the database returned an item it is displayed in JSON
  along with a 200 status code. If it is not found a 404 status code is triggered.
+
 ###### handleCreateProduceItem(ResponseWrite, *Request)
 This function first parses the JSON body request into a `ProduceItem` type then
 checks to see that all fields are valid and filled in by calling the `ProduceItem`
@@ -134,6 +138,7 @@ along with a JSON response of the errors. If the `ProduceItem` is valid a gorout
 is triggered to create an item with the data passed back through a channel.
  If the produce code already exists in the data a status code 409 is triggered
  if not a 201 status code is triggered with the JSON of the `ProduceItem` returned.
+
 ###### handleUpdateProduceItem(ResponseWrite, *Request)
 This function checks if the produce code passed in from the URL is valid,
 if it is not a status code 400 is triggered. If it is the JSON from the request
@@ -144,6 +149,7 @@ passes the updated item back through a channel. If the produce code was not foun
 status code 404 is triggered or if the changed produce code already exists a status
 409 is triggered. Otherwise a status 200 is triggered and the updated item contents
 are returned as a JSON.
+
 ###### handleDeleteProduceItem(ResponseWrite, *Request)
 This function first checks if the produce code passed in from the URL is valid,
 if it is not a status code 400 is triggered. If the produce code is valid
@@ -151,20 +157,25 @@ a goroutine,`deleteProduceItem(ProductionItem, chan ProduceItem)`, is triggered 
 the produce item back through a channel. If the code was not found a status 404
 is triggered, if it was found a status 200 is triggered and the deleted produce item
 is returned as a JSON.
+
 ##### Model Methods (Go Routines)
 These are the functions that change values in the database or are methods of created data types.
+
 ###### getAllProduceItems(chan)
 `RLock()`s the database and returns all produce items on channel then `RUnlock()`s the database.
+
 ###### getProduceItem(string, chan ProduceItem)
 `RLock()`s the database then searches for produce code. If the code
 is found it returns the corresponding item on a channel and if not
 found returns an empty item on a channel then `RUnlock()`s the database.
+
 ###### createProduceItem(ProduceItem, chan ProduceItem)
 `Lock()`s the database and brings the produce code to upper case since
 it is case insensitive and will give consistency to how the data is presented.
 If the code already exists an empty ProduceItem is returned on the channel. Othewise,
 The data is appeneded to the database and the created item is returned on the channel.
 The database is then `Unlock()`ed at the end of either case.
+
 ###### updateProduceItem(string, ProduceItem, chan ProduceItem)
 `Lock()`s the database and brings the produce code to upper case since
 it is case insensitive and will give consistency to how the data is presented.
@@ -173,11 +184,17 @@ if the new value already exists and returns a ProduceItem with a code of '0' if 
 Otherwise it changes the values of the database at the found location with the new information and returns the updated item on the channel.
 If the item to be updated is not found an empty ProduceItem is returned on the channel. At the end
 of any case the database is `Unlock()`ed.
+
 ###### deleteProduceItem(ProduceItem, chan ProduceItem)
 `Lock()`s the database and searches for the produce code given. If the code is found
 that item is removed from the database and its information retruend on the channel.
 If it is not found an empty ProduceItem is returned. At the end of either case
 the database is `Unlock()`ed.
+
+##### Testing
+Test code is located in api_test.go and done in table format with assistance from the testify package [https://github.com/stretchr/testify]
+to faciliate easy to read and write test code.
+
 ### Docker - Multi-stage build
 The docker build specifics are located in the Dockerfile. It is a multi-stage docker
 build to keep the size of the image down. It first uses the golang image to build
