@@ -222,7 +222,7 @@ func isValidName(name string) bool {
 func jsonResponse(w http.ResponseWriter, statusCode int, payload interface{}) {
 	response, err := json.Marshal(payload) //convert payload to JSON
 
-	//if things got this far and invalid JSON syntax is presented something unexpected has happened
+	//if data type could not be converted to json
 	if err != nil {
 		panic(err)
 	}
