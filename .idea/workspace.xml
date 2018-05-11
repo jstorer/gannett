@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0d216430-9403-4813-a7b4-4ee3cacecde2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/api.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/api.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -44,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="api.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/api.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="130" column="37" lean-forward="true" selection-start-line="130" selection-start-column="37" selection-end-line="130" selection-end-column="37" />
+            <state relative-caret-position="-4163">
+              <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
               <folding>
                 <element signature="e#96#182#0" expanded="true" />
               </folding>
@@ -59,7 +58,7 @@
       <file leaf-file-name="api_test.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/api_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="599">
+            <state relative-caret-position="7238">
               <caret line="329" column="5" lean-forward="true" selection-start-line="329" selection-start-column="5" selection-end-line="329" selection-end-column="5" />
               <folding>
                 <element signature="e#13#159#0" expanded="true" />
@@ -86,10 +85,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="model_test.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="model_test.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/model_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1871">
+            <state relative-caret-position="330">
               <caret line="15" column="27" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
               <folding>
                 <element signature="e#13#68#0" expanded="true" />
@@ -284,7 +283,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Test.go test gannett">
+  <component name="RunManager" selected="Go Build.go build github.com/jstorer/gannett">
     <configuration name="go build github.com/jstorer/gannett" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="gannett" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -343,8 +342,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Test.go test gannett" />
         <item itemvalue="Go Build.go build github.com/jstorer/gannett" />
+        <item itemvalue="Go Test.go test gannett" />
         <item itemvalue="Go Test.TestValidateProduceItem in github.com/jstorer/gannett/api" />
         <item itemvalue="Go Build.go build main.go" />
         <item itemvalue="Go Test.TestGetAllProduce in github.com/jstorer/gannett/api" />
@@ -352,9 +351,6 @@
     </recent_temporary>
   </component>
   <component name="TestHistory">
-    <history-entry file="go_test_gannett - 2018.05.10 at 20h 12m 37s.xml">
-      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
-    </history-entry>
     <history-entry file="go_test_gannett - 2018.05.10 at 20h 13m 33s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
@@ -382,6 +378,9 @@
     <history-entry file="go_test_gannett - 2018.05.11 at 01h 10m 48s.xml">
       <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
     </history-entry>
+    <history-entry file="go_test_gannett - 2018.05.11 at 11h 24m 28s.xml">
+      <configuration name="go test gannett" configurationId="GoTestRunConfiguration" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="2556" height="1417" extended-state="6" />
@@ -390,10 +389,10 @@
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.3296582" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.42174247" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.42174247" />
       <window_info anchor="right" id="Coverage" order="3" side_tool="true" weight="0.21161495" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.3298585" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10739857" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.10739857" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" weight="0.3296011" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -777,9 +776,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/api/api.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4163">
+          <caret line="19" column="39" lean-forward="true" selection-start-line="19" selection-start-column="39" selection-end-line="19" selection-end-column="39" />
+          <folding>
+            <element signature="e#96#182#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/api/api_test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="599">
+        <state relative-caret-position="7238">
           <caret line="329" column="5" lean-forward="true" selection-start-line="329" selection-start-column="5" selection-end-line="329" selection-end-column="5" />
           <folding>
             <element signature="e#13#159#0" expanded="true" />
@@ -789,20 +798,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api/model_test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1871">
+        <state relative-caret-position="330">
           <caret line="15" column="27" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
           <folding>
             <element signature="e#13#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/api.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="130" column="37" lean-forward="true" selection-start-line="130" selection-start-column="37" selection-end-line="130" selection-end-column="37" />
-          <folding>
-            <element signature="e#96#182#0" expanded="true" />
           </folding>
         </state>
       </provider>
