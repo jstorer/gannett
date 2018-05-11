@@ -1,7 +1,7 @@
+//Tests for api.go
 package api
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"io"
@@ -18,12 +18,14 @@ var (
 	produceUrl string
 )
 
+//set produceURL for testing and tell api.go we are testing
 func init() {
 	server = httptest.NewServer(Handlers())
 	produceUrl = fmt.Sprintf("%s/api/produce", server.URL)
 	Initialize(true)
 }
 
+//set DB to default state
 func reinitTest() {
 	currentDB.Data = []ProduceItem{
 		{"A12T-4GH7-QPL9-3N4M", "Lettuce", "$3.46"},
@@ -33,6 +35,7 @@ func reinitTest() {
 	}
 }
 
+//test isValidProduceCode regex
 func TestIsValidProduceCode(t *testing.T) {
 	var testCodes = []struct {
 		value string
@@ -74,6 +77,29 @@ func TestIsValidProduceCode(t *testing.T) {
 	}
 }
 
+//test isValidName Regex
+func TestIsValidName(t *testing.T) {
+	var testNames = []struct {
+		value string
+		valid bool
+	}{
+		{"A", true},
+		{"A A", true},
+		{"Milk", true},
+		{"Cow Milk", true},
+		{"Cow Milk 12", true},
+		{"cow milk 12", true},
+		{"", false},
+		{" ", false},
+		{" a", false},
+		{"m!lk", false},
+	}
+	for _, item := range testNames {
+		assert.Equal(t, item.valid, isValidName(item.value), fmt.Sprintf("On Unit Price: `%s`", item.value))
+	}
+}
+
+//test isValidUnitPrice regex
 func TestIsValidUnitPrice(t *testing.T) {
 	var testPrices = []struct {
 		value string
@@ -109,110 +135,7 @@ func TestIsValidUnitPrice(t *testing.T) {
 
 }
 
-func TestGetAllProduceItems(t *testing.T) {
-	reinitTest()
-	chnl := make(chan []ProduceItem)
-	go getAllProduceItems(chnl)
-	allItems := <-chnl
-	assert.Equal(t, currentDB.Data, allItems, "DB not returning correct values")
-}
 
-func TestGetProduceItem(t *testing.T) {
-	var getProduceItemTests = []struct {
-		desc           string
-		produceCode    string
-		expectedOutput string
-	}{
-		{"produce code valid", "2222-2222-2222-2222", "2222-2222-2222-2222"},
-		{"produce code invalid", "aji-ewfi-23ijf", ""},
-		{"produce code does not exist", "1111-1111-1111-1111", ""},
-	}
-	for _, item := range getProduceItemTests {
-		reinitTest()
-		pItemChnl := make(chan ProduceItem)
-		go getProduceItem(item.produceCode, pItemChnl)
-		pItem := <-pItemChnl
-		assert.Equal(t, item.expectedOutput, pItem.ProduceCode, fmt.Sprintf("unexpected output for %s", item.desc))
-	}
-}
-
-func TestCreateProduceItem(t *testing.T) {
-	var createProduceItemTests = []struct {
-		desc           string
-		pItem          ProduceItem
-		expectedOutput ProduceItem
-	}{
-		{"valid produce item", ProduceItem{"1111-1111-1111-1111", "Bacon", "$1.23"}, ProduceItem{"1111-1111-1111-1111", "Bacon", "$1.23"}},
-		{"produce code already exists", ProduceItem{"2222-2222-2222-2222", "Bacon", "$1.23"}, ProduceItem{"", "", ""}},
-	}
-	for _, item := range createProduceItemTests {
-		reinitTest()
-		pItemChanl := make(chan ProduceItem)
-		go createProduceItem(item.pItem, pItemChanl)
-		pItem := <-pItemChanl
-		assert.Equal(t, item.expectedOutput, pItem, fmt.Sprintf("unexpeted output for %s", item.desc))
-	}
-}
-
-func TestUpdateProduceItem(t *testing.T) {
-	var updateProduceItemTests = []struct {
-		desc           string
-		produceCode    string
-		pItem          ProduceItem
-		expectedOutput ProduceItem
-	}{
-		{"valid produce code", "2222-2222-2222-2222", ProduceItem{"1111-1111-1111-1111", "Bacon", "$1.23"}, ProduceItem{"1111-1111-1111-1111", "Bacon", "$1.23"}},
-		{"updated code exists", "2222-2222-2222-2222", ProduceItem{"A12T-4GH7-QPL9-3N4M", "Bacon", "$1.23"}, ProduceItem{"0", "", ""}},
-		{"produce code not found", "ABCD-2222-2222-2222", ProduceItem{"A12T-4GH7-QPL9-3N4M", "Bacon", "$1.23"}, ProduceItem{"", "", ""}},
-	}
-
-	for _, item := range updateProduceItemTests {
-		reinitTest()
-		pItemChnl := make(chan ProduceItem)
-		go updateProduceItem(item.produceCode, item.pItem, pItemChnl)
-		pItem := <-pItemChnl
-		assert.Equal(t, item.expectedOutput, pItem, fmt.Sprintf("unexpeted output for %s", item.desc))
-	}
-}
-
-func TestDeleteProduceItem(t *testing.T) {
-	var deleteProduceItemTests = []struct {
-		desc           string
-		produceCode    string
-		expectedOutput ProduceItem
-	}{
-		{"valid produce code", "2222-2222-2222-2222", ProduceItem{"2222-2222-2222-2222", "Gala Apple", "$3.59"}},
-		{"code does not exist", "ABCD-2222-2222-2222", ProduceItem{"", "", ""}},
-	}
-	for _, item := range deleteProduceItemTests {
-		reinitTest()
-		pItemChnl := make(chan ProduceItem)
-		go deleteProduceItem(item.produceCode, pItemChnl)
-		pItem := <-pItemChnl
-		assert.Equal(t, item.expectedOutput, pItem, fmt.Sprintf("unexpeted output for %s", item.desc))
-	}
-}
-
-func TestIsValidName(t *testing.T) {
-	var testNames = []struct {
-		value string
-		valid bool
-	}{
-		{"A", true},
-		{"A A", true},
-		{"Milk", true},
-		{"Cow Milk", true},
-		{"Cow Milk 12", true},
-		{"cow milk 12", true},
-		{"", false},
-		{" ", false},
-		{" a", false},
-		{"m!lk", false},
-	}
-	for _, item := range testNames {
-		assert.Equal(t, item.valid, isValidName(item.value), fmt.Sprintf("On Unit Price: `%s`", item.value))
-	}
-}
 
 func TestHandleGetAllProduce(t *testing.T) {
 	var getAllTests = []struct {
@@ -282,35 +205,35 @@ func TestHandleUpdateProduceItem(t *testing.T) {
 		method       string
 		path         string
 		statusCode   int
-		produceCode  string
-		name         string
-		unitPrice    string
+		pItemJSON    string
 		expectedBody string
 	}{
 		{"produce code remains same", "POST", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl),
-			200, "A12T-4GH7-QPL9-3N4M", "Lettuce", "$3.46", `{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"Lettuce","unit_price":"$3.46"}`},
+			200, `{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"Lettuce","unit_price":"$3.46"}`, `{"produce_code":"A12T-4GH7-QPL9-3N4M","name":"Lettuce","unit_price":"$3.46"}`},
+		//
+		{"bad JSON syntax", "POST", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl),
+			400, `{"produce_code":"A12T-4GH7-QPL9-1111","name":"Cheese","unit_price":"$5.00"`, "error 400 - invalid JSON syntax\n"},
 		//
 		{"push to db check", "POST", fmt.Sprintf("%s/A12T-4GH7-QPL9-3N4M", produceUrl),
-			200, "A12T-4GH7-QPL9-1111", "Cheese", "$5.00", `{"produce_code":"A12T-4GH7-QPL9-1111","name":"Cheese","unit_price":"$5.00"}`},
+			200, `{"produce_code":"A12T-4GH7-QPL9-1111","name":"Cheese","unit_price":"$5.00"}`, `{"produce_code":"A12T-4GH7-QPL9-1111","name":"Cheese","unit_price":"$5.00"}`},
 		//
 		{"updated code already exists", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-QR88", produceUrl),
-			409, "2222-2222-2222-2222", "Cheese", "$5.00", "error 409 - updated produce code value already exists\n"},
+			409, `{"produce_code":"2222-2222-2222-2222","name":"Cheese","unit_price":"$5.00"}`, "error 409 - updated produce code value already exists\n"},
 		//
 		{"produce code doesn't exist to update", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-1111", produceUrl),
-			404, "A12T-4GH7-QPL9-3N4A", "Cheese", "$5.00", "error 404 - produce code does not exist\n"},
+			404, `{"produce_code":"A12T-4GH7-QPL9-3N4A","name":"Cheese","unit_price":"$5.00"}`, "error 404 - produce code does not exist\n"},
 		//
 		{"invalid end point", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-111", produceUrl),
-			400, "", "", "", "error 400 - invalid produce code format\n"},
+			400, `{"produce_code":"","name":"","unit_price":""}`, "error 400 - invalid produce code format\n"},
 		//
 		{"bad payload", "POST", fmt.Sprintf("%s/E5T6-9UI3-TH15-QR88", produceUrl),
-			400, "A12T-4GH7-QPL9-3NM", "", "5.00",
+			400, `{"produce_code":"A12T-4GH7-QPL9-3NM","name":"","unit_price":"5.00"}`,
 			`{"validationError":{"name":["name field is required","invalid name format"],"produce_code":["invalid produce code format"],"unit_price":["invalid unit price format"]}}`},
 	}
 
 	for _, item := range updateItemTests {
 		reinitTest()
-		produceItemJson := `{"produce_code":"` + item.produceCode + `","name":"` + item.name + `","unit_price":"` + item.unitPrice + `"}`
-		reader = strings.NewReader(produceItemJson)
+		reader = strings.NewReader(item.pItemJSON)
 		request, err := http.NewRequest(item.method, item.path, reader)
 		response, err := http.DefaultClient.Do(request)
 
@@ -330,31 +253,32 @@ func TestHandleCreateProduceItem(t *testing.T) {
 		method       string
 		path         string
 		statusCode   int
-		produceCode  string
-		name         string
-		unitPrice    string
+		pItemJSON    string
 		expectedBody string
 	}{
-		{"create item", "POST", produceUrl, 201, "1234-5678-90ab-cdef",
-			"Cheese", "$9.99", `{"produce_code":"1234-5678-90AB-CDEF","name":"Cheese","unit_price":"$9.99"}`},
+		{"create item", "POST", produceUrl, 201, `{"produce_code":"1234-5678-90ab-cdef","name":"Cheese","unit_price":"$9.99"}`,
+			`{"produce_code":"1234-5678-90AB-CDEF","name":"Cheese","unit_price":"$9.99"}`},
 		//
-		{"try to create duplicate code", "POST", produceUrl, 409, "2222-2222-2222-2222",
-			"Cheese", "$9.99", "error 409 - produce code already exists\n"},
+		{"bad JSON syntax", "POST", produceUrl, 400, `{"produce_code":"1234-5678-90ab-cdef","name":"Cheese","unit_price","$9.99"`,
+			"error 400 - invalid JSON syntax\n"},
+
+		{"try to create duplicate code", "POST", produceUrl, 409, `{"produce_code":"2222-2222-2222-2222","name":"Cheese","unit_price":"$9.99"}`,
+			"error 409 - produce code already exists\n"},
 		//
-		{"left produce code field empty", "POST", produceUrl, 400, "",
-			"Cheese", "$4.60", `{"validationError":{"produce_code":["produce field is required","invalid produce code format"]}}`},
+		{"left produce code field empty", "POST", produceUrl, 400, `{"produce_code":"","name":"Cheese","unit_price":"$4.60"}`,
+			`{"validationError":{"produce_code":["produce field is required","invalid produce code format"]}}`},
 		//
-		{"left name and unit field empty", "POST", produceUrl, 400, "1111-1111-1111-1111",
-			"", "", `{"validationError":{"name":["name field is required","invalid name format"],"unit_price":["unit price field is required","invalid unit price format"]}}`},
+		{"left name and unit field empty", "POST", produceUrl, 400, `{"produce_code":"1111-1111-1111-1111","name":"","unit_price":""}`,
+			`{"validationError":{"name":["name field is required","invalid name format"],"unit_price":["unit price field is required","invalid unit price format"]}}`},
 		//
-		{"all fields invalid", "POST", produceUrl, 400, "23aja-fafe-grge-sdf",
-			"Ch!eese", "23.432", `{"validationError":{"name":["invalid name format"],"produce_code":["invalid produce code format"],"unit_price":["invalid unit price format"]}}`},
+		{"all fields invalid", "POST", produceUrl, 400, `{"produce_code":"23aja-fafe-grge-sdf","name":"Ch!eese","unit_price":"23.432"}`,
+			`{"validationError":{"name":["invalid name format"],"produce_code":["invalid produce code format"],"unit_price":["invalid unit price format"]}}`},
 	}
 
 	for _, item := range createItemTests {
 		reinitTest()
-		produceItemJson := `{"produce_code":"` + item.produceCode + `","name":"` + item.name + `","unit_price":"` + item.unitPrice + `"}`
-		reader = strings.NewReader(produceItemJson)
+		//produceItemJson := `{"produce_code":"` + item.produceCode + `","name":"` + item.name + `","unit_price":"` + item.unitPrice + `"}`
+		reader = strings.NewReader(item.pItemJSON)
 		request, err := http.NewRequest(item.method, item.path, reader)
 		response, err := http.DefaultClient.Do(request)
 
@@ -401,32 +325,4 @@ func TestHandleDeleteProduceItem(t *testing.T) {
 	}
 }
 
-func TestHandleValidateProduceItem(t *testing.T) {
-	var validateProduceItemTests = []struct {
-		desc           string
-		produceCode    string
-		name           string
-		unitPrice      string
-		expectedOutput string
-	}{
-		{"everything valid", "1111-1111-1111-1111", "milk", "$1.00", `{"validationError":{}}`},
-		{"everything empty", "", "", "",
-			`{"validationError":{"name":["name field is required","invalid name format"],"produce_code":["produce field is required","invalid produce code format"],"unit_price":["unit price field is required","invalid unit price format"]}}`},
-		//
-		{"everything invalid", "12fava-sdfw-eaav-va", "fj#@j", " 12.2",
-			`{"validationError":{"name":["invalid name format"],"produce_code":["invalid produce code format"],"unit_price":["invalid unit price format"]}}`},
-		//
-	}
 
-	for _, item := range validateProduceItemTests {
-		var pItem ProduceItem
-		pItem.ProduceCode = item.produceCode
-		pItem.Name = item.name
-		pItem.UnitPrice = item.unitPrice
-		validErrs := pItem.validateProduceItem()
-		err := map[string]interface{}{"validationError": validErrs}
-		response, _ := json.Marshal(err)
-		assert.Equal(t, item.expectedOutput, string(response), fmt.Sprintf("unexpected output for %s", item.desc))
-	}
-
-}

@@ -150,6 +150,26 @@ status code 404 is triggered or if the changed produce code already exists a sta
 409 is triggered. Otherwise a status 200 is triggered and the updated item contents
 are returned as a JSON.
 
+##### Handler Helper Functions
+These functions are used to perform some frequent duties inside the handler functions
+
+###### func isValidProduceCode(produceCode string) bool
+This function accepts a produce string and validates via the regex expression `^[\d\w]{4}-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}$`
+to determine if it is valid or not and returns true if valid or false if not. This expression checks that code is four groups of four alphanumeric characters.
+
+###### func isValidUnitPrice(unitPrice string) bool
+This function accepts a unit price string and validates via the regex expression `^\$(([1-9]\d{0,2}(,\d{3})*)|(([1-9]\d*)?\d))(\.\d\d?)?$`
+which requires a dollar sign followed by numbers with or without correct comma seperation but not incorrect comma seperation and at most 2 trailing decimals. If valid returns true and if not valid returns false.
+
+###### func isValidName(name string) bool
+This function accepts a name string and validates via the regex expression `\w+(?: \w+)*$`
+which will allow no whitespace before or trailing whitespace after a single space set of alphanumeric characters.
+If valid returns true if not valid returns false.
+
+###### func jsonResponse(w http.ResponseWriter, statusCode int, payload interface{})
+This function accepts a ResponseWriter, status code, and payload and then JSON encodes it via json.Marshall()
+and then writes the corresponding body and headers in JSON format to be displayed.
+
 ###### handleDeleteProduceItem(ResponseWrite, *Request)
 This function first checks if the produce code passed in from the URL is valid,
 if it is not a status code 400 is triggered. If the produce code is valid

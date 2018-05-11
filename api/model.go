@@ -1,3 +1,4 @@
+//Contains functions that manipulate the database or methods attached to created data types.
 package api
 
 import (
@@ -6,23 +7,29 @@ import (
 	"sync"
 )
 
+//type to store a produce item
 type ProduceItem struct {
 	ProduceCode string `json:"produce_code"`
 	Name        string `json:"name"`
 	UnitPrice   string `json:"unit_price"`
 }
 
+//type to represent a database with a mutex to assist in preventing race conditions
 type DBObject struct {
 	mu   sync.RWMutex
 	Data []ProduceItem
 }
 
+//return all items from the database on a channel, used RLock since only reading done.
 func getAllProduceItems(allItemsChnl chan []ProduceItem) {
 	currentDB.mu.RLock()
 	defer currentDB.mu.RUnlock()
 	allItemsChnl <- currentDB.Data
 }
 
+//returns a single produce item on a channel based on the given produce code
+//if the item is not found an empty item is returned on the channel.
+//RLock is used since only read operations done here
 func getProduceItem(pCode string, pItemChnl chan ProduceItem) {
 	currentDB.mu.RLock()
 	defer currentDB.mu.RUnlock()
@@ -35,6 +42,9 @@ func getProduceItem(pCode string, pItemChnl chan ProduceItem) {
 	pItemChnl <- ProduceItem{}
 }
 
+//creates a new produce item in the database by checking if the given produce code already exists.
+//if the code exists an empty item is returned to the channel. If the code does not exist the item is
+//appended to the database and returned on the channel
 func createProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
 	currentDB.mu.Lock()
 	defer currentDB.mu.Unlock()
@@ -50,6 +60,10 @@ func createProduceItem(pItem ProduceItem, pItemChnl chan ProduceItem) {
 	pItemChnl <- pItem
 }
 
+//updates an item in the database of the given produce code. If the produce code given does not exist an empty item
+//is returned on the channel. If the code exists but the new code being updated already exists in the database a produce code
+// "0" is returned. If the item is able to be created the new contents overwrite the old ones at the given index and return
+//the new produce item on the channel.
 func updateProduceItem(pCode string, pItem ProduceItem, pItemChnl chan ProduceItem) {
 	currentDB.mu.Lock()
 	defer currentDB.mu.Unlock()
@@ -76,6 +90,8 @@ func updateProduceItem(pCode string, pItem ProduceItem, pItemChnl chan ProduceIt
 	pItemChnl <- ProduceItem{}
 }
 
+//deletes an item from the database based on the incoming produce code. If the produce code is not found an
+//empty item is returned. If the code is found it is then removed from the database.
 func deleteProduceItem(pCode string, pItemChnl chan ProduceItem) {
 	currentDB.mu.Lock()
 	defer currentDB.mu.Unlock()
@@ -94,8 +110,10 @@ func deleteProduceItem(pCode string, pItemChnl chan ProduceItem) {
 	pItemChnl <- ProduceItem{}
 }
 
+//checks that produce item fields are populated as intended and in the correct format.
 func (pItem *ProduceItem) validateProduceItem() url.Values {
-	errs := url.Values{}
+	errs := url.Values{} //store errors
+
 	//all required fields exist
 	if pItem.ProduceCode == "" {
 		errs.Add("produce_code", "produce field is required")
@@ -108,6 +126,7 @@ func (pItem *ProduceItem) validateProduceItem() url.Values {
 	if pItem.UnitPrice == "" {
 		errs.Add("unit_price", "unit price field is required")
 	}
+
 	//are all values valid formats
 	pItem.ProduceCode = strings.ToUpper(pItem.ProduceCode)
 	if !isValidProduceCode(pItem.ProduceCode) {
@@ -121,5 +140,6 @@ func (pItem *ProduceItem) validateProduceItem() url.Values {
 	if !isValidUnitPrice(pItem.UnitPrice) {
 		errs.Add("unit_price", "invalid unit price format")
 	}
+
 	return errs
 }
