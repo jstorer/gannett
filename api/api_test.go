@@ -159,6 +159,7 @@ func TestHandleGetAllProduce(t *testing.T) {
 		}
 
 		responseData, _ := ioutil.ReadAll(response.Body)
+		response.Body.Close()
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
 		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
@@ -193,6 +194,7 @@ func TestHandleGetProduceItem(t *testing.T) {
 		}
 
 		responseData, _ := ioutil.ReadAll(response.Body)
+		response.Body.Close()
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
 		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
@@ -242,6 +244,7 @@ func TestHandleUpdateProduceItem(t *testing.T) {
 		}
 
 		responseData, _ := ioutil.ReadAll(response.Body)
+		response.Body.Close()
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
 		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
@@ -287,6 +290,7 @@ func TestHandleCreateProduceItem(t *testing.T) {
 		}
 
 		responseData, _ := ioutil.ReadAll(response.Body)
+		response.Body.Close()
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
 		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
@@ -320,9 +324,11 @@ func TestHandleDeleteProduceItem(t *testing.T) {
 		}
 
 		responseData, _ := ioutil.ReadAll(response.Body)
+		response.Body.Close()
 		assert.Equal(t, item.expectedBody, string(responseData), fmt.Sprintf("unexpected response for %s", item.desc))
 		assert.Equal(t, item.statusCode, response.StatusCode, fmt.Sprintf("unexpected status code for %s", item.desc))
 	}
+
 }
 
 
